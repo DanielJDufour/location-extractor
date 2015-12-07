@@ -1,0 +1,9 @@
+border 
+eastern 
+defense minister
+finance minister
+governor
+northern 
+prime minister 
+southern 
+western 

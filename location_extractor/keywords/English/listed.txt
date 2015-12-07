@@ -1,0 +1,6 @@
+cities
+countries
+islands
+nations
+places
+states
