@@ -96,8 +96,8 @@ def extract_locations(text):
         elif language == "Arabic":
 
             d = dictionary_of_keywords[language]
-            arabic_letter = u"[\u0600-\u06FF]"
-            location_pattern = u"([\u0600-\u06FF]+(?: \u0627\u0644[\u0600-\u06FF]+)*)"
+            arabic_letter = u"[\u0600-\u061E\u0620-\u06EF\u06FA-\u06FF]"
+            location_pattern = u"(" + arabic_letter + "{3,}(?: \u0627\u0644" + arabic_letter + "{3,})*)"
             locations.update(flatten(findall(ur"(?:"+ "|".join(d['before']) + ") " + location_pattern, text, flags)))
 
 
@@ -109,4 +109,4 @@ def extract_location(text):
     # returns a random location ... in the future make this so return the first location matched.. but implement as separate method entirely
     return extract_locations(text)[0]
 
-x = extract_locations
+el = extract_locations
