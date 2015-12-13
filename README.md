@@ -16,6 +16,7 @@ locations = extract_locations(text)
 # Features
 | Languages Supported |
 | ------------------- |
+| Arabic |
 | English |
 
 # Testing
