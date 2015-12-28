@@ -38,6 +38,16 @@ class TestStringMethods(unittest.TestCase):
         location = extract_location(text)
         self.assertEqual(location, "Iraq")
 
+        text = "The supposed events occurred in Lothlorien, Manchuria, Hong Kong, London, New York, Trenton, Chicago and Atlantic City from January to March 1920."
+        locations = extract_locations(text)
+        self.assertTrue("Lothlorien" in locations)
+        self.assertTrue("Manchuria" in locations)
+        self.assertTrue("Hong Kong" in locations)
+        self.assertTrue("London" in locations)
+        self.assertTrue("New York" in locations)
+        self.assertTrue("Trenton" in locations)
+        self.assertTrue("Chicago" in locations)
+        self.assertTrue("Atlantic City" in locations)
 
 if __name__ == '__main__':
     unittest.main()

@@ -20,24 +20,31 @@ def flatten(lst):
         if hasattr(element, '__iter__'):
             result.extend(flatten(element))
         else:
-            result.append(element)
+            for e in element.split(","):
+                e = e.strip()
+                if e:
+                    result.append(e)
     return result
 
 def load_language_into_dictionary_of_keywords(language):
     dictionary_of_keywords[language] = {}
     directory_of_language_files = directory_of_keywords + "/" + language
     language_files = listdir(directory_of_language_files)
-    print "language_files are", language_files
+    #print "language_files are", language_files
     for filename in language_files:
-        name = filename.split(".")[0]
-        print "filename is", filename
-        if filename == "demonyms.txt":
-            print "d emmeomnymys"
-        else:
-            with open(directory_of_language_files + "/" + filename) as f:
-                keywords = f.read().decode("utf-8").strip().split("\n")
-                keywords += [keyword.title() for keyword in keywords]
-                dictionary_of_keywords[language][name] = keywords
+
+        # ignore hidden and temporary files like .listed.swp
+        if not filename.startswith("."):
+            name = filename.split(".")[0]
+            #print "filename is", filename
+            if filename == "demonyms.txt":
+                #print "d emmeomnymys"
+                pass
+            else:
+                with open(directory_of_language_files + "/" + filename) as f:
+                    keywords = f.read().decode("utf-8").strip().split("\n")
+                    keywords += [keyword.title() for keyword in keywords]
+                    dictionary_of_keywords[language][name] = keywords
 
 def extract_locations(text):
     if isinstance(text, str):
@@ -54,7 +61,7 @@ def extract_locations(text):
     if not languages: 
         languages = listdir(directory_of_keywords)
 
-    print "languages = ", languages
+    #print "languages = ", languages
 
     locations = set()
 
@@ -63,7 +70,7 @@ def extract_locations(text):
         if language not in dictionary_of_keywords:
             load_language_into_dictionary_of_keywords(language)
 
-        print "language =", language
+        #print "language =", language
         if language == "English":
 
             d = dictionary_of_keywords[language]
@@ -72,7 +79,7 @@ def extract_locations(text):
 
             #keyword comes before location
             locations.update(flatten(findall(ur"(?:(?:[^A-Za-z]|^)(?:"+ "|".join(d['before']) + ") )" + location_pattern, text, flags)))
-            print "\nbefore locations are", locations
+            #print "\nbefore locations are", locations
 
             #keywords comes after location
             locations.update(flatten(findall(location_pattern + ur" (?:" + "|".join(d['after']) + ")", text, flags)))
@@ -81,9 +88,12 @@ def extract_locations(text):
             locations.update(flatten(findall(location_pattern + ur"'s (?:" + "|".join(d['possessed']) + ")", text, flags)))
 
             #keyword is something can be listed, like the islands of Santo Domingo and Cuba
-            locations_pattern = location_pattern + "(?:, " + location_pattern + ")*,? and " + location_pattern
-            pattern = ur"(?:" + "|".join(d['listed']) + ")" + ur"(?: of |, |, [a-z]* )" + locations_pattern
+            locations_pattern = location_pattern + "((?:, " + location_pattern + ")*),? and " + location_pattern
+            pattern = ur"(?:" + "|".join(d['listed']) + ")" + ur"(?: | of |, |, [a-z]* )" + locations_pattern
+            #print "text is", text
+            #print "pattern is", pattern
             locations.update(flatten(findall(pattern, text, flags)))
+            #print "locations are", locations
 
             #ignore demonyms for now, because accuracy is not that high
             #Eritreans, Syrian
