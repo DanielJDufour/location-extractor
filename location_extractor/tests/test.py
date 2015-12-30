@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 import unittest
-from location_extractor import extract_location, extract_locations
+from datetime import datetime
+from location_extractor import *
 
 class TestStringMethods(unittest.TestCase):
 
@@ -48,6 +49,14 @@ class TestStringMethods(unittest.TestCase):
         self.assertTrue("Trenton" in locations)
         self.assertTrue("Chicago" in locations)
         self.assertTrue("Atlantic City" in locations)
+
+    def test_english_with_context(self):
+        text = """
+        President Obama has used Oval Office speeches sparingly, compared with previous presidents. His previous two addresses, both in 2010, covered the Deepwater Horizon oil spill and the end of combat operations in Iraq.
+        """
+        location = extract_location_with_context(text)
+        self.assertEqual(location['name'], "Iraq")
+        self.assertEqual(str(location['date']), "2010-01-01 00:00:00+00:00")
 
 if __name__ == '__main__':
     unittest.main()
