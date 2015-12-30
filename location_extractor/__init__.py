@@ -60,10 +60,12 @@ def extract_locations(text):
     # see if we can figure out what language the text is
     # if we can't figure it out, just try to extract locations using all the languages we got
     languages = []
-    if detect_language:
-        detected_language = detect_language(text)
-        if detected_language:
-            languages = [detected_language]
+
+    # language_detector isn't reliable enough yet
+    #if detect_language:
+    #    detected_language = detect_language(text)
+    #    if detected_language:
+    #        languages = [detected_language]
 
     if not languages: 
         languages = listdir(directory_of_keywords)

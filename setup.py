@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
   name = 'location-extractor',
   packages = ['location_extractor'],
-  version = '2.0',
+  version = '2.1',
   description = 'Extract locations from text',
   author = 'Daniel J. Dufour',
   author_email = 'daniel.j.dufour@gmail.com',
