@@ -121,6 +121,13 @@ def extract_locations(text):
             locations.update(flatten(findall(ur"(?:"+ "|".join(d['before']) + ") " + location_pattern, text, flags)))
 
 
+    # filter out things we often capture that aren't locations
+    # and that are actually names of random places
+    nonlocations = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+
+    locations = [location for location in locations if location not in nonlocations]
+
+
     #convert locations to a list
     locations = list(locations)
     return locations
@@ -146,18 +153,18 @@ def extract_locations_with_context(text):
     pattern = "(" + "|".join(names) + ")"
     for matchgroup in finditer(pattern, text, flags):
         name = matchgroup.group(0)
-        print "name is", name
+        #print "name is", name
         text = matchgroup.string
-        print "text is", len(text), text[:100]
+        #print "text is", len(text), text[:100]
         start = matchgroup.start()
-        print "start is", start
+        #print "start is", start
         end = matchgroup.end()
-        print "end is", end
+        #print "end is", end
         middle = float(end + start) / 2
-        print "middle is", middle
+        #print "middle is", middle
         sentence = [m.group(0) for m in list(finditer("[^\.\n]+",text)) if m.start() < middle < m.end()][0].strip()
         paragraph = [m.group(0) for m in list(finditer("[^\n]+",text)) if m.start() < middle < m.end()][0].strip()
-        print "\nparagraph is", paragraph
+        #print "\nparagraph is", paragraph
 
         dictionary_of_location = {}
 
