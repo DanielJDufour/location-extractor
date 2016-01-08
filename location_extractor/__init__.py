@@ -13,6 +13,14 @@ try:
 except ImportError:
     extract_date = None
 
+try:
+    from bscrp import isJavaScript
+except ImportError:
+    isJavaScript = None
+try:
+    from PyPDF2 import PdfFileReader
+except ImportError:
+    PdfFileReader = None
 
 
 directory_of_this_file = dirname(realpath(__file__))
@@ -49,11 +57,12 @@ def load_language_into_dictionary_of_keywords(language):
                 pass
             else:
                 with open(directory_of_language_files + "/" + filename) as f:
-                    keywords = f.read().decode("utf-8").strip().split("\n")
+                    keywords = [keyword for keyword in f.read().decode("utf-8").strip().split("\n") if keyword]
                     keywords += [keyword.title() for keyword in keywords]
                     dictionary_of_keywords[language][name] = keywords
 
-def extract_locations(text):
+def extract_locations_from_text(text):
+    print "starting extract_locations_from_text"
     if isinstance(text, str):
         text = text.decode("utf-8")
 
@@ -132,13 +141,13 @@ def extract_locations(text):
     locations = list(locations)
     return locations
 
-def extract_location(text):
+def extract_location(inpt):
     # returns a random location ... in the future make this so return the first location matched.. but implement as separate method entirely
-    return extract_locations(text)[0]
+    return extract_locations(inpt)[0]
 
-el = extract_locations
 
-def extract_locations_with_context(text):
+def extract_locations_with_context_from_text(text):
+    print "starting extract_locations_with_context_from_text with", type(text)
 
     if not extract_date:
         raise Exception("You must have date-extractor installed to use this method.  To fix the problem, run: pip install date-extractor")
@@ -172,11 +181,31 @@ def extract_locations_with_context(text):
 
         dictionary_of_location['date'] = date = extract_date(sentence) or extract_date(paragraph)
 
-        dictionary_of_location['context'] = paragraph
+        if not isJavaScript or not isJavaScript(paragraph):
+            dictionary_of_location['context'] = paragraph
 
         dictionary_of_location['hash'] = str(date) + "-" + name
 
         locations.append(dictionary_of_location)
+
+    # get locations by looking for columns with location keywords in them
+    lists = findall("((?:\n^[^\n]{4,20}$){5,})", text, MULTILINE)
+    for text_of_list in lists:
+        count = 0
+        keywords = []
+        for language in dictionary_of_keywords:
+            keywords += dictionary_of_keywords[language]["general"]
+           
+        for keyword in keywords: 
+            count += text_of_list.count(keyword)
+
+        if count > 5:
+            lines = text_of_list.split("\n")
+            names = [line for line in lines if line and len(line) > 4 and line not in keywords]
+
+            for name in names:
+                date = extract_date(text_of_list)
+                locations.append({"name": name, "date": date, "hash": str(date) + "-" + name, "context": name})
 
     names = [location['name'] for location in locations]
 
@@ -193,15 +222,67 @@ def extract_locations_with_context(text):
         h = location['hash']
         if h in grouped_by_hash:
             #if have same hash, then have same exact location and date, so just need to update context
-            if location['context']:
+            if "context" in location and location['context']:
                 grouped_by_hash[h]['context'] += "\n ... \n" + location['context']
         else:
-            grouped_by_hash[h] = {'context': location['context'], 'date': location['date'], 'name': location['name']}
+            d = {'date': location['date'], 'name': location['name']}
+            if "context" in location and location['context']:
+                d['context'] = location['context']
+            grouped_by_hash[h] = d
  
     locations = grouped_by_hash.values()
 
     return locations
-        
+       
+def extract_locations_from_path_to_pdf(path_to_pdf):
+    with open(path_to_pdf) as f:
+        return extract_locations_from_pdf(pdf)
 
-def extract_location_with_context(text):
-    return extract_locations_with_context(text)[0]
+# takes in a pdf file and returns the text
+def get_text_from_pdf_file(pdf_file):
+    pdfFileReader = PdfFileReader(pdf_file)
+    number_of_pages = pdfFileReader.getNumPages()
+    text = ""
+    for i in range(number_of_pages):
+        text += pdfFileReader.getPage(i).extractText()
+    text = sub(" *\n[\n ]*", "\n", text)
+    lines = text.split("\n")
+    lines = [line for line in lines if len(line) > 4]
+    text = "\n".join(lines)
+    return text
+ 
+def extract_locations_from_pdf(pdf_file):
+    print "starting extract_locations_from_pdf"
+    return extract_locations_from_text(get_text_from_pdf_file(pdf_file))
+
+def extract_locations_with_context_from_pdf(pdf_file):
+    print "starting extract_locations_with_context_from_pdf"
+    return extract_locations_with_context_from_text(get_text_from_pdf_file(pdf_file))
+
+def extract_location_with_context(inpt):
+    return extract_locations_with_context(inpt)[0]
+
+def extract_locations(inpt):
+    if isinstance(inpt, str) or isinstance(inpt, unicode):
+        if inpt.endswith(".pdf"):
+            return extract_locations_from_path_to_pdf(inpt)
+        else:
+            return extract_locations_from_text(inpt)
+    elif isinstance(inpt, file):
+        if f.name.endswith(".pdf"):
+            return extract_locations_from_pdf(inpt)
+
+def extract_locations_with_context(inpt):
+    print "starting extract_locations_with_context with", type(inpt)
+    if isinstance(inpt, str) or isinstance(inpt, unicode):
+        if inpt.endswith(".pdf"):
+            return extract_locations_with_context_from_pdf(inpt)
+        else:
+            return extract_locations_with_context_from_text(inpt)
+    elif "InMemoryUploadedFile" in str(inpt) or isinstance(inpt, file):
+        print "isinstance file"
+        if inpt.name.endswith(".pdf"):
+            return extract_locations_with_context_from_pdf(inpt)
+
+el = extract_locations
+elc = extract_locations_with_context
