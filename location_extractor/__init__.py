@@ -279,7 +279,7 @@ def extract_locations_with_context(inpt):
             return extract_locations_with_context_from_pdf(inpt)
         else:
             return extract_locations_with_context_from_text(inpt)
-    elif "InMemoryUploadedFile" in str(inpt) or isinstance(inpt, file):
+    elif "file" in str(type(inpt)).lower():
         print "isinstance file"
         if inpt.name.endswith(".pdf"):
             return extract_locations_with_context_from_pdf(inpt)
