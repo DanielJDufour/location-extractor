@@ -132,7 +132,7 @@ def extract_locations_from_text(text):
 
     # filter out things we often capture that aren't locations
     # and that are actually names of random places
-    nonlocations = ["January","February","March","April","May","June","July","August","September","October","November","December","Pictures","You"]
+    nonlocations = ["January","February","March","April","May","June","July","August","September","October","November","December","Pictures","You","The"]
 
     locations = [location for location in locations if location not in nonlocations]
 

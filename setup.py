@@ -3,7 +3,9 @@ from distutils.core import setup
 setup(
   name = 'location-extractor',
   packages = ['location_extractor'],
-  version = '2.5',
+  package_dir = {'location_extractor': 'location_extractor'},
+  package_data = {'location_extractor': ['prep/char_language.txt','tests/__init__.py','tests/test.py']},
+  version = '2.6',
   description = 'Extract locations from text',
   author = 'Daniel J. Dufour',
   author_email = 'daniel.j.dufour@gmail.com',
