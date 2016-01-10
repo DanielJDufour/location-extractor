@@ -132,7 +132,7 @@ def extract_locations_from_text(text):
 
     # filter out things we often capture that aren't locations
     # and that are actually names of random places
-    nonlocations = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+    nonlocations = ["January","February","March","April","May","June","July","August","September","October","November","December","Pictures","You"]
 
     locations = [location for location in locations if location not in nonlocations]
 
@@ -223,7 +223,10 @@ def extract_locations_with_context_from_text(text):
         if h in grouped_by_hash:
             #if have same hash, then have same exact location and date, so just need to update context
             if "context" in location and location['context']:
-                grouped_by_hash[h]['context'] += "\n ... \n" + location['context']
+                if 'context' in grouped_by_hash[h]:
+                    grouped_by_hash[h]['context'] += location['context']
+                else:
+                    grouped_by_hash[h]['context'] = "\n ... \n" + location['context']
         else:
             d = {'date': location['date'], 'name': location['name']}
             if "context" in location and location['context']:
