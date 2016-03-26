@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/DanielJDufour/location-extractor.svg?branch=master)](https://travis-ci.org/DanielJDufour/location-extractor)
+
+[![Requirements Status](https://requires.io/github/DanielJDufour/location-extractor/requirements.svg?branch=master)](https://requires.io/github/DanielJDufour/location-extractor/requirements/?branch=master)
+
 # location-extractor
 location-extractor helps you extract locations from text
 
