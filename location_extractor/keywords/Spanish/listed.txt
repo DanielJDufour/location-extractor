@@ -1,0 +1,8 @@
+ciudades
+en
+estados
+islas
+lugares
+naciones
+países
+states
