@@ -58,5 +58,10 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(location['name'], "Iraq")
         self.assertEqual(str(location['date']), "2010-01-01 00:00:00+00:00")
 
+    def test_english_after(self):
+        text = "This is Costa Brava County."
+        location = extract_location(text)
+        self.assertEqual(location, "Costa Brava")
+
 if __name__ == '__main__':
     unittest.main()
