@@ -75,6 +75,10 @@ class TestStringMethods(unittest.TestCase):
         location = extract_location(text)
         self.assertEqual(location, "Abancay")
 
+    def test_english_after(self):
+        text = "This is Costa Brava County."
+        location = extract_location(text)
+        self.assertEqual(location, "Costa Brava")
 
 if __name__ == '__main__':
     unittest.main()

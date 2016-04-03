@@ -1,3 +1,9 @@
 city
+City
+CITY
 county
+County
+COUNTY
 province
+Province
+PROVINCE
