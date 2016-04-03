@@ -302,13 +302,13 @@ def extract_locations(inpt):
         if f.name.endswith(".pdf"):
             return extract_locations_from_pdf(inpt)
 
-def extract_locations_with_context(inpt):
+def extract_locations_with_context(inpt, names=None):
     print "starting extract_locations_with_context with", type(inpt)
     if isinstance(inpt, str) or isinstance(inpt, unicode):
         if inpt.endswith(".pdf"):
             return extract_locations_with_context_from_pdf(inpt)
         else:
-            return extract_locations_with_context_from_text(inpt)
+            return extract_locations_with_context_from_text(inpt, names=names)
     elif "file" in str(type(inpt)).lower():
         print "isinstance file"
         if inpt.name.endswith(".pdf"):
