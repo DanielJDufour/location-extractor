@@ -5,7 +5,7 @@ setup(
   packages = ['location_extractor'],
   package_dir = {'location_extractor': 'location_extractor'},
   package_data = {'location_extractor': ['prep/char_language.txt','tests/__init__.py','tests/test.py','keywords/*']},
-  version = '2.9',
+  version = '3.0',
   description = 'Extract locations from text',
   author = 'Daniel J. Dufour',
   author_email = 'daniel.j.dufour@gmail.com',

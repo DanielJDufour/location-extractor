@@ -171,7 +171,7 @@ def extract_location(inpt):
     return extract_locations(inpt)[0]
 
 
-def extract_locations_with_context_from_text(text):
+def extract_locations_with_context_from_text(text, names=None):
     print "starting extract_locations_with_context_from_text with", type(text)
 
     if not extract_date:
@@ -181,7 +181,9 @@ def extract_locations_with_context_from_text(text):
     locations = []
 
     # got locations as list of words
-    names = extract_locations(text)
+    # you can pass in a list of names if you are supposedly only extracting from that list of names
+    if not names:
+        names = extract_locations(text)
 
     # find locations and surrounding information including date and paragraph
     pattern = "(" + "|".join(names) + ")"
