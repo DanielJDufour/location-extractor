@@ -1,255 +1,832 @@
-Abkhazia,Abkhazians,Abkhazian,Abkhaz
-Afghanistan,Afghan,Afghans
-Albania,Albanian,Albanians
-Algeria,Algerian,Algerians
-American Samoa,American Samoan,American Samoans
-Andorra,Andorran,Andorrans
-Angola,Angolans,Angolan
-Anguilla,Anguillans,Anguillan
-Antarctica,Antarctic,Antarctic residents
-Antigua and Barbuda,Barbudans,Barbudan,Antiguan,Antiguans
-Argentina,Argentines,Argentine
-Armenia,Armenian,Armenians
-Aruba,Aruban,Arubans
-Australia,Australians,Australian
-Austria,Austrian,Austrians
-Azerbaijan,Azerbaijanis,Azeri,Azeris,Azerbaijani
-Bahamas,Bahamian,Bahamians
-Bahrain,Bahraini,Bahrainis
-Bangladesh,Bangladeshis,Bangladeshi
-Barbados,Barbadian,Barbadians
-Belarus,Belarusians,Belarusian
-Belgium,Belgians,Belgian
-Belize,Belizean,Belizeans
-Benin,Beninese,Beninois,Beninoises
-Bermuda,Bermudian,Bermudan,Bermudans,Bermudians
-Bhutan,Bhutanese
-Bolivia,Bolivian,Bolivians
-Bonaire,Bonaire,Bonaire Dutch
-Bosnia and Herzegovina,Herzegovinian,Bosnian,Herzegovinians,Bosnians
-Botswana,Motswana,Botswanan
-Bouvet Island,none,Bouvet Island
-Brazil,Brazilians,Brazilian
-British Indian Ocean Territory,British,BIOT
-Brunei,Bruneian,Bruneians
-Bulgaria,Bulgarians,Bulgarian
-Burma,Burmese,Bamar
-Burundi,Burundian,Barundi,Burundians
-Cabo Verde,Cabo Verdean,Cabo Verdeans
-Cambodia,Cambodian,Cambodians
-Cameroon,Cameroonians,Cameroonian
-Canada,Canadians,Canadian
-Cape Verde,Cabo Verdean,Cabo Verdeans
-Cayman Islands,Caymanian,Caymanians
-Central African Republic,Central African,Central Africans
-Chad,Chadian,Chadians
-Chile,Chilean,Chileans
-China,Chinese
-Christmas Island,Christmas Islanders,Christmas Island
-Cocos,Cocos Islanders,Cocos Island
-Colombia,Colombian,Colombians
-Comoros,Comorans,Comorian,Comorians,Comoran
-Congo,Congolese
-Cook Islands,Cook Island,Cook Islanders
-Costa Rica,Costa Rican,Costa Ricans
-Croatia,Croats,Croatians,Croatian
-Cuba,Cubans,Cuban
-Cyprus,Cypriot,Cypriots
-Czech Republic,Czech,Czechs
-Denmark,Danish,Danes
-Djibouti,Djiboutian,Djiboutians
-Dominica,Dominican,Dominicans
-Dominican Republic,Dominican,Dominicans
-East Timor,Timorese
-Ecuador,Ecuadorian,Ecuadorians
-Egypt,Egyptians,Egyptian
-El Salvador,Salvadoran,Salvadorans
-England,Englishmen,Englishwomen,British,English
-Equatorial Guinea,Equatoguineans,Equatorial Guineans,Equatorial Guinean,Equatoguinean
-Eritrea,Eritrean,Eritreans
-Estonia,Estonian,Estonians
-Ethiopia,Ethiopian,Ethiopians
-European Union,Europeans,European
-Falkland Islands,Falkland Island,Falkland Islanders
-Faroe Islands,Faroese
-Fiji,Fijian,Fijians
-Finland,Finnish,Finns
-France,Frenchmen,French,Frenchwomen
-French Guiana,French Guianese
-French Polynesia,French Polynesian,French Polynesians
-French Southern Territories,French Southern Territories,French
-Gabon,Gabonese
-Gambia,Gambians,Gambian
-Georgia,Georgian,Georgians
-Germany,German,Germans
-Ghana,Ghanaians,Ghanaian
-Gibraltar,Gibraltarians,Gibraltar
-Great Britain,Britons,UK,British
-Greece,Hellenic,Greek,Hellenes,Greeks
-Greenland,Greenlandic,Greenlanders
-Grenada,Grenadians,Grenadian
-Guadeloupe,Guadeloupians,Guadeloupe
-Guam,Guamanian,Guambat,Guamanians
-Guatemala,Guatemalan,Guatemalans
-Guernsey,Channel Islander,Channel Island
-Guinea,Guineans,Guinean
-Guinea-Bissau,Bissau-Guinean,Bissau-Guineans
-Guyana,Guyanese
-Haiti,Haitian,Haitians
-Heard Island and McDonald Islands,none,McDonald Islands,Heard Island
-Honduras,Honduran,Hondurans
-Hong Kong,Hongkongers,Hong Kong,Hong Kongese
-Hungary,Hungarians,Magyar,Hungarian,Magyars
-Iceland,Icelandic,Icelanders
-India,Indians,Indian
-Indonesia,Indonesians,Indonesian
-Iran,Persians,Persian,Iranians,Iranian
-Iraq,Iraqi,Iraqis
-Ireland,Irishmen,Irish,Irishwomen
-Isle of Man,Manx
-Israel,Israeli,Israelis
-Italy,Italians,Italian
-Ivory Coast,Ivorian,Ivorians
-Jamaica,Jamaican,Jamaicans
-Jan Mayen,Jan Mayen,
-Japan,Japanese
-Jersey,Channel Islander,Channel Island
-Jordan,Jordanian,Jordanians
-Kazakhstan,Kazakhstani,Kazakhs,Kazakh,Kazakhstanis
-Kenya,Kenyans,Kenyan
-Kiribati,I-Kiribati
-Korea,Koreans,North Korean
-Kosovo,Kosovar,Kosovan,Kosovars
-Kuwait,Kuwaiti,Kuwaitis
-Kyrgyzstan,Kyrgyzstanis,Kyrgyzstani,Kirgiz,Kyrgyz,Kirghiz
-Laos,Laotians,Laotian,Lao,Laos
-Latvia,Latvians,Letts,Latvian
-Lebanon,Lebanese
-Lesotho,Basotho
-Liberia,Liberian,Liberians
-Libya,Libyan,Libyans
-Liechtenstein,Liechtenstein,Liechtensteiners
-Lithuania,Lithuanian,Lithuanians
-Luxembourg,Luxembourgish,Luxembourgers,Luxembourg
-Macau,Macanese,Chinese
-Macedonia,Macedonian,Macedonians
-Madagascar,Malagasy
-Malawi,Malawians,Malawian
-Malaysia,Malaysian,Malaysians
-Maldives,Maldivian,Maldivians
-Mali,Malian,Malinese,Malians
-Malta,Maltese
-Marshall Islands,Marshallese
-Martinique,Martiniquais,Martiniquaises,Martinican
-Mauritania,Mauritanians,Mauritanian
-Mauritius,Mauritian,Mauritians
-Mayotte,Mahorans,Mahoran
-Mexico,Mexicans,Mexican
-Micronesia,Micronesian,Micronesians
-Moldova,Moldovans,Moldovan
-Mongolia,Mongols,Mongolian,Mongolians
-Montenegro,Montenegrin,Montenegrins
-Montserrat,Montserratians,Montserratian
-Morocco,Moroccans,Moroccan
-Mozambique,Mozambican,Mozambicans
-Myanmar,Burmese,Bamar
-Namibia,Namibians,Namibian
-Nauru,Nauruan,Nauruans
-Nepal,Nepali,Nepalese
-Netherlands,Netherlandic,Dutchmen,Netherlanders,Dutchwomen,Dutch
-New Caledonia,New Caledonian,New Caledonians
-New Zealand,New Zealand,NZ,New Zealanders
-Nicaragua,Nicaraguan,Nicaraguans
-Niger,Nigerien,Nigeriens
-Nigeria,Nigerian,Nigerians
-Niue,Niueans,Niuean
-Norfolk Island,Norfolk Island,Norfolk Islander
-Northern Ireland,Northern Irishwomen,Northern Irish,Northern Irishmen,British
-Northern Mariana Islands,Northern Marianans,Northern Marianan
-Norway,Norwegian,Norwegians
-Oman,Omani,Omanis
-Pakistan,Pakistani,Pakistanis
-Palau,Palauans,Palauan
-Palestine,Palestinians,Palestinian
-Panama,Panamanian,Panamanians
-Papua New Guinea,Papuans,Papua New Guineans,Papua New Guinean,Papuan
-Paraguay,Paraguayans,Paraguayan
-Peru,Peruvian,Peruvians
-Philippines,Filipinos,Filipinas,Philippine,Filipino
-Pitcairn Islands,Pitcairn Island,Pitcairn Islanders
-Poland,Polish,Poles
-Portugal,Portuguese
-Puerto Rico,Puerto Rican,Puerto Ricans
-Qatar,Qataris,Qatari
-Romania,Romanian,Romanians
-Russia,Russian,Russians
-Rwanda,Rwandans,Rwandan,Banyarwanda
-Saba,Saba Dutch,Saba
-Saint Helena,Saint Helenian,Saint Helenians
-Saint Kitts and Nevis,Kittitian,Kittitians,Nevisian,Nevisians
-Saint Lucia,Saint Lucian,Saint Lucians
-Saint Martin,Saint-Martinoises,Saint-Martinoise,Saint-Martinois
-Saint Pierre and Miquelon,Miquelonnaises,Saint-Pierraises,Saint-Pierrais,Miquelonnais
-Saint Vincent and the Grenadines,Saint Vincentians,Vincentian,Saint Vincentian,Vincentians
-Samoa,Samoans,Samoan
-San Marino,Sammarinese
-Saudi Arabia,Saudi Arabian,Saudi,Saudi Arabians,Saudis
-Scotland,Scotswomen,Scots,Scotsmen,British,Scottish
-Senegal,Senegalese
-Serbia,Serbians,Serbs,Serbian
-Seychelles,Seychelloises,Seychellois
-Sierra Leone,Sierra Leoneans,Sierra Leonean
-Singapore,Singaporeans,Singaporean,Singapore
-Sint Eustatius,Statian,Sint Eustatius,Statians
-Sint Maarten,Sint Maartener,Sint Maarten
-Slovakia,Slovaks,Slovak
-Slovenia,Slovene,Slovenian,Slovenians,Slovenes
-Solomon Islands,Solomon Islanders,Solomon Island
-Somalia,Somalian,Somalians,Somalis,Somali
-South Africa,South Africans,South African
-South Georgia and the South Sandwich Islands,none,South Sandwich Islands,South Georgia
-South Ossetia,South Ossetian,South Ossetians
-South Sudan,South Sudanese
-Spain,Spaniards,Spanish
-Sri Lanka,Sri Lankans,Sri Lankan
-Sudan,Sudanese
-Surinam,Surinamers,Surinamese
-Svalbard,,Svalbard
-Swaziland,Swazi,Swazis
-Sweden,Swedish,Swedes
-Switzerland,Swiss
-Syria,Syrians,Syrian
-Taiwan,Taiwanese,Chinese
-Tajikistan,Tajikistani,Tajiks,Tajikistanis
-Tanzania,Tanzanian,Tanzanians
-Thailand,Thai
-Timor-Leste,Timorese
-Togo,Togolese
-Tokelau,Tokelauan,Tokelauans
-Tonga,Tongan,Tongans
-Trinidad and Tobago,Tobagonians,Trinidadian,Trinidadians,Tobagonian
-Tunisia,Tunisians,Tunisian
-Turkey,Turks,Turkish
-Turkmenistan,Turkmens,Turkmen
-Turks and Caicos Islands,Turks and Caicos Island,Turks and Caicos Islanders
-Tuvalu,Tuvaluan,Tuvaluans
-Uganda,Ugandan,Ugandans
-Ukraine,Ukrainians,Ukrainian
-United Arab Emirates,Emiratis,Emiri,Emirian,Emirati,Emirians
-United Kingdom,Britons,UK,British
-United States,United States,American,Americans,US
-Uruguay,Uruguayan,Uruguayans
-Uzbekistan,Uzbek,Uzbekistanis,Uzbekistani,Uzbeks
-Vanuatu,Vanuatuan,Ni-Vanuatu
-Vatican City State,Vatican citizens,Vatican
-Venezuela,Venezuelan,Venezuelans
-Vietnam,Vietnamese
-Virgin Islands,British Virgin Islanders,British Virgin Island
-Virgin Islands,U.S. Virgin Islanders,U.S. Virgin Island
-Wales,Welsh,Welshwomen,British,Welshmen
-Wallis and Futuna,Wallisians,Futunan,Futunans,Wallis and Futuna,Wallisian,Wallis and Futuna Islanders
-Western Sahara,Sahrawi,Sahraouis,Sahrawian,Sahrawis,Sahraouian
-Yemen,Yemeni,Yemenis
-Zambia,Zambian,Zambians
-Zimbabwe,Zimbabweans,Zimbabwean
-Italy,Italiana,Italiano
+Aberdonian	Aberdeen
+Aberdonians	Aberdeen
+African	Africa
+Africans	Africa
+Ahmedabadi	Ahmedabad
+Ahmedabadis	Ahmedabad
+Aivaliot	Aivali
+Alabaman	Alabama
+Alabamans	Alabama
+Alabamian	Alabama
+Alabamians	Alabama
+Alaskan	Alaska
+Alaskans	Alaska
+Albanian	Albany
+Albanians	Albany
+Albertan	Alberta
+Albertans	Alberta
+Alexandrian	Alexandria
+Alexandrian	Alexandria
+Alsatian	Alsace
+Alsatians	Alsace
+American	America
+Americans	America
+Amsterdamer	Amsterdam
+Amsterdamer	Amsterdam
+Andalusian	Andalusia
+Andalusians	Andalusia
+Angeleno	Los Angeles
+Angelenos	Los Angeles
+anglo	Los Angeles
+Antwerpian	Antwerp
+Antwerpians	Antwerp
+Aostan	Aosta
+Aostans	Aosta
+Apulian	Apulia
+Apulians	Apulia
+Arab	Arabs
+Arabs	Arabs
+Aragonese	Aragon
+Aragonese	Aragon
+Argentinian	Argentina
+Argentinian	Argentina
+Arizonan	Arizona
+Arizonans	Arizona
+Arizonian	Arizona
+Arizonians	Arizona
+Arkansan	Arkansas
+Arkansans	Arkansas
+Arkansasan	Arkansas
+Arkansasans	Arkansas
+Arkansasian	Arkansas
+Arkansasian	Arkansas
+Arkansawyer	Arkansas
+Arkansawyer	Arkansas
+Arkansian	Arkansas
+Arkansians	Arkansas
+Arkie	Arkansas
+Arkies	Arkansas
+Arubian	Aruba
+Arubians	Aruba
+Astanan	Astana
+Astanans	Astana
+Asturian	Asturias
+Asturians	Asturias
+Athenian	Athens
+Athenians	Athens
+Aucklander	Auckland
+Aucklanders	Auckland
+Australian	Australia
+Australians	Australia
+Austro-Hungarian	Austria
+Austro	Austria
+Balinese	Bali
+Bangalorean	Bangalore
+Bangalorean	Bangalore
+Basque	Bangalore
+Basques	Bangalore
+Bavarian	Bavaria
+Bavarians	Bavaria
+Belgradian	Belgrade
+Belgradians	Belgrade
+Bengali	Bengal
+Bengalis	Bengal
+Berliner	Berlin
+Berliners	Berlin
+Bornean	Borneo
+Bostonian	Boston
+Bostonians	Boston
+Brazilian	Brazil
+Brazilians	Brazil
+brazuca	Brazil
+Breton	Brittany
+Bretons	Brittany
+Brit	Brittany
+Brits	Brittany
+British Columbian	British Columbia
+British Columbians	British Columbia
+Britisher	British
+Britishers	British
+Briton	Great Britain
+Britons	Great Britain
+Brooklynite	Brooklyn
+Brooklynite	Brooklyn
+Brusselian	Brussels
+Brusselians	Brussels
+Budapestian	Budapest
+Budapestian	Budapest
+BVIslander	Budapest
+Cairene	Cairo
+Cairenes	Cairo
+Calabrian	Calabria
+Calabrians	Calabria
+Calcuttan	Calcutta
+Calcuttans	Calcutta
+Calgarian	Calgary
+Calgarians	Calgary
+Californian	California
+Californian	California
+Campanian	Campania
+Campanians	Campania
+Canadian	Canada
+Canadians	Canada
+Canadien	Canada
+Canadiens	Canada
+Canadienne	Canada
+Canadiennes	Canada
+Canarian	Canada
+Canarians	Canada
+Canberran	Canberra
+Canberrans	Canberra
+Cantabrian	Cantabria
+Cantabrians	Cantabria
+Caraquenian	Caracas
+Caraquenian	Caracas
+Carolinian	Caracas
+Carolinians	Caracas
+Cascadian	Cascadia
+Cascadians	Cascadia
+Catalan	Catalonia
+Catalans	Catalonia
+Central African	Central Africa
+Central Africans	Central Africa
+Cephaloniot	Cephalonia
+Cephaloniot	Cephalonia
+Charlestonian	Charleston
+Charlestoni	Charleston
+Charlottetonian	Charlotteto
+Charlotteto	Charlotteto
+Cheddarhead	Cheddar
+Cheddarhead	Cheddar
+Chicagoan	Chicago
+Chicagoans	Chicago
+Cimbrian	Chicago
+Cimbrians	Chicago
+Colcestrian	Chicago
+Colcestrian	Chicago
+Coloradan	Colorado
+Coloradans	Colorado
+Connecticuter	Connecticut
+Connecticut	Connecticut
+Copenhagener	Copenhagen
+Copenhagene	Copenhagen
+Corfiot	Corfu
+Corfiots	Corfu
+Corfiote	Corfu
+Corfiotes	Corfu
+Corinthian	Corinth
+Corinthians	Corinth
+Cornishman	Corinth
+Cornishmen	Corinth
+Cornishwoman	Corinth
+Cornishwome	Corinth
+Corsican	Corsica
+Corsicans	Corsica
+Cracovian	Cracow
+Cracovians	Cracow
+Cretan	Crete
+Cretans	Crete
+Crimean	Crimea
+Crimeans	Crimea
+Cypriot	Cyprus
+Cypriots	Cyprus
+Dakotan	Cyprus
+Dakotans	Cyprus
+Dalmatian	Cyprus
+Dalmatians	Cyprus
+Damascene	Damascus
+Damascenes	Damascus
+Danish-Canadian	Canadians
+Delawarean	Delaware
+Delawareans	Delaware
+Delhian	Delhi
+Delhians	Delhi
+Delhiite	Delhi
+Delhiites	Delhi
+Dubliner	Dublin
+Dubliners	Dublin
+East Anglian	East Anglia
+East Anglians	East Anglia
+Edmontonian	Edmonton
+Emilian	Emilia
+Emilians	Emilia
+Englander	England
+Englanders	England
+English-Canadian	Canadians
+Englishman	England
+Englishmen	England
+Englishwoman	England
+Englishwome	England
+Eridian	England
+Erie	England
+Europan	England
+Europans	England
+Extremaduran	Extremadura
+Extremadura	Extremadura
+Florentine	Extremadura
+Florentines	Extremadura
+Floridian	Florida
+Floridians	Florida
+Frankfurter	Florida
+Frederictonian	Fredericton
+Fredericton	Fredericton
+French Canadian	Fredericton
+French Canadians	Fredericton
+French-Canadian	Canadians
+Frenchman	French
+Frenchmen	French
+Frenchwoman	French
+Frenchwomen	French
+Frisian	French
+Frisians	French
+Friulian	Friuli
+Friulians	Friuli
+Galician	Galicia
+Galicians	Galicia
+Galilean	Galilee
+Galileans	Galilee
+Gascon	Gascony
+Gascons	Gascony
+Genevan	Geneva
+Genevans	Geneva
+Genoese	Genoa
+Genoese	Genoa
+Genovese	Genoa
+Genovesi	Genoa
+Georgian	Georgia
+Georgians	Georgia
+German	Germany
+Germans	Germany
+German-Canadian	Canadians
+Gibraltarian	Gibraltar
+Gibraltaria	Gibraltar
+Glaswegian	Glasgow
+Glaswegians	Glasgow
+Gothenburger	Gothenburg
+Gothenburge	Gothenburg
+Granadan	Granada
+Granadans	Granada
+Grecian	Greece
+Grecians	Greece
+Greek	Greece
+Greenlander	Greenland
+Greenlander	Greenland
+Haligonian	Halifax
+Haligonians	Halifax
+Hamburger	Hamburg
+Hamburgers	Hamburg
+Hamiltonian	Hamburg
+Hamiltonian	Hamburg
+Hanoverian	Hanover
+Hanoverians	Hanover
+Harcourtian	Port Harcourt
+Harcourtian	Port Harcourt
+Hawaiian	Hawaii
+Hawaiians	Hawaii
+Hessian	Hesse
+Hispanic	Spain
+Hispanics	Spain
+Hispano	Spain
+Hispanos	Spain
+Hong Konger	Hong Kong
+Hong Kongers	Hong Kong
+Hong Kongite	Hong Kong
+Hong Kongites	Hong Kong
+Hungarian	Hungary
+Hungarish	Hungar
+Hyderabadi	Hyderabad
+Hyderabadis	Hyderabad
+Ibizan	Ibiza
+Ibizans	Ibiza
+Idahoan	Idaho
+Idahoans	Idaho
+Illinoisan	Illinois
+Illinoisans	Illinois
+Imbriot	Imbros
+Imbriots	Imbros
+Indian	India
+Indians	India
+Indianan	Indiana
+Indianans	Indiana
+Indianapolitan	Indianapoli
+Indianapoli	Indianapoli
+Inuit	Inuit
+Inuit	Inuit
+Ionian	Inuit
+Ionians	Inuit
+Iowan	Iowa
+Iowans	Iowa
+Iqalummiuq	Iowa
+Iqalummiut	Iowa
+Iqalummiut	Iowa
+Iqalungmiut	Iqaluit
+Iqalungmiut	Iqaluit
+Irelander	Ireland
+Irelanders	Ireland
+Irish	Ireland
+Irishman	Irish
+Irishmen	Irish
+Irishwoman	Irish
+Irishwomen	Irish
+Islander	Irish
+Islanders	Irish
+Istrian	Istria
+Istrians	Istria
+Istriot	Istria
+Istriots	Istria
+Italian-Canadian	Canadians
+Ivorian	Canadians
+Ivorians	Canadians
+Jaipuri	Jaipur
+Jaipuris	Jaipur
+Jaipurian	Jaipur
+Jaipurians	Jaipur
+Javan	Jaipur
+Javans	Jaipur
+Jerseyman	Jersey
+Jerseymen	Jersey
+Jerusalemite	Jerusalem
+Jerusalemit	Jerusalem
+Johnny Canuck	Jerusalem
+Jovian	Jupiter
+Jovians	Jupiter
+Jutlander	Jutland
+Jutlanders	Jutland
+Kalamazooan	Kalamazoo
+Kalamazooan	Kalamazoo
+Kalymniot	Kalymnos
+Kalymniots	Kalymnos
+Kansan	Kansas
+Kansans	Kansas
+Kentuckian	Kentucky
+Kentuckians	Kentucky
+Kenyan	Kenya
+Kenyans	Kenya
+Kievan	Kiev
+Kievans	Kiev
+Kolkatan	Kolkata
+Kolkatans	Kolkata
+Kyivan	Kyiv
+Kyivans	Kyiv
+Labradorian	Labrador
+Labradorian	Labrador
+Las Vegan	Las Vegas
+Lemniot	Lemnos
+Lemniots	Lemnos
+Lesbian	Lesbos
+Lesbians	Lesbos
+Lesviot	Lesvos
+Lesviots	Lesvos
+Ligurian	Liguria
+Ligurians	Liguria
+Lisboner	Lisbon
+Lisboners	Lisbon
+Liverpudlian	Liverpool
+Liverpudlia	Liverpool
+Livonian	Livonia
+Livonians	Livonia
+Category:en:Demonyms for Americans	Livonia
+Category:English informal demonyms	Livonia
+Category:en:Latvian demonyms	Livonia
+Category:en:Nationalities	Livonia
+Livornian	Livorno
+Livornians	Livorno
+Lombard	Lombardy
+Lombards	Lombardy
+Londoner	Lombardy
+Londoners	Lombardy
+Long Islander	Long Island
+Long Islanders	Long Island
+Louisianan	Long Island
+Louisianans	Long Island
+Louisianian	Louisiana
+Louisianian	Louisiana
+Lunarian	Luna
+Lunarians	Luna
+Macaoese	Macao
+Macaoese	Macao
+Madeiran	Madeira
+Madeirans	Madeira
+Madrilenian	Madrid
+Madrilenian	Madrid
+Madrileño	Madrid
+Madrile	Madrid
+Mainer	Maine
+Mainers	Maine
+Majorcan	Majorca
+Majorcans	Majorca
+Mallorcan	Mallorca
+Mallorcans	Mallorca
+Mancunian	Mallorca
+Mancunians	Mallorca
+Manhattanite	Manhattan
+Manhattanit	Manhattan
+Maniot	Mani
+Maniots	Mani
+Manitoban	Manitoba
+Manitobans	Manitoba
+Manxman	Manitoba
+Manxmen	Manitoba
+Manxwoman	Manitoba
+Manxwomen	Manitoba
+Maritimer	Manitoba
+Maritimers	Manitoba
+Martian	Manitoba
+Martians	Manitoba
+Marylander	Maryland
+Marylanders	Maryland
+Massachusettsan	Massachuset
+Massachuset	Massachuset
+Massachusettsian	Massachuset
+Massachuset	Massachuset
+Masurian	Masuria
+Masurians	Masuria
+Median	Mede
+Medians	Mede
+Memphite	Memphis
+Memphites	Memphis
+Menorcan	Memphis
+Menorcans	Memphis
+Mercurian	Mercury
+Mercurians	Mercury
+Mexican	Mexico
+Mexicans	Mexico
+Michigander	Michigan
+Michigander	Michigan
+Michiganian	Michigan
+Midwesterner	Midwestern
+Midwesterne	Midwestern
+Milanese	Milan
+Milaneses	Milan
+Miliot	Milos
+Miliots	Milos
+Minnesotan	Minnesota
+Minnesotans	Minnesota
+Minorcan	Minorca
+Minorcans	Minorca
+Mississaugan	Mississauga
+Mississauga	Mississauga
+Mississippian	Mississippi
+Mississippi	Mississippi
+Missourian	Missouri
+Missourians	Missouri
+Montanan	Montana
+Montanans	Montana
+Montegonian	Montego
+Montegonian	Montego
+Montrealer	Montego
+Montrealers	Montego
+Mooninite	Luna
+Mooninites	Luna
+Moose Javian	Luna
+Moose Javians	Luna
+Moravian	Moravia
+Moravians	Moravia
+Moreot	Morea
+Moreots	Morea
+Muscovite	Moscow
+Muscovites	Moscow
+Nashvillian	Nashville
+Nashvillian	Nashville
+Navarran	Navarre
+Navarrans	Navarre
+Navarrese	Navarre
+Navarreses	Navarre
+Naxiot	Naxos
+Naxiots	Naxos
+Neapolitan	Naples
+Neapolitans	Naples
+Nebraskan	Nebraska
+Nebraskans	Nebraska
+Nepalese	Nepal
+Nepalese	Nepal
+Nepali	Nepal
+Nepalis	Nepal
+Neptunian	Neptune
+Neptunians	Neptune
+Nevadan	Nevada
+Nevadans	Nevada
+New Brunswicker	New Brunswick
+New Englander	New England
+New Hampshirite	New Hampshire
+New Jerseyite	New Jersey
+New Mexican	New Mexico
+New Yorker	New York
+New Zealander	New Zealand
+New Zealandress	New Zealander
+Newfie	Newfoundlan
+Newfies	Newfoundlan
+Newfoundlander	Newfoundlan
+Newfoundlan	Newfoundlan
+Norman	Normandy
+Normans	Normandy
+North American	Normandy
+North Americans	Normandy
+North Carolinian	Carolina
+North Carolinians	Carolina
+North Dakotan	North Dakota
+North Dakotans	North Dakota
+North Walian	North Wales
+North Walians	North Wales
+Northumbrian	North Wales
+Northumbria	North Wales
+Norwegian-Canadian	Canadians
+Nova Scotian	Nova Scotia
+Nova Scotians	Nova Scotia
+Nunavimmiut	Nunavik
+Nunavummiuq	Nunavut
+Nunavummiut	Nunavut
+Nunavummiut	Nunavut
+Oberonian	Oberon
+Oceanian	Oceania
+Oceanians	Oceania
+Ohioan	Ohio
+Ohioans	Ohio
+Okie	Oklahoma
+Okies	Oklahoma
+Oklahoman	Oklahoma
+Oklahomans	Oklahoma
+Ontarian	Ontario
+Ontarians	Ontario
+Orcadian	Ontario
+Orcadians	Ontario
+Oregonian	Oregon
+Oregonians	Oregon
+Orkneyan	Orkney
+Orkneyans	Orkney
+Osloite	Oslo
+Osloites	Oslo
+Ossetian	Ossetia
+Ossetians	Ossetia
+Ottawan	Ottawa
+Ottawans	Ottawa
+Pacific Northwesterner	Ottawa
+Pacific Northwester	Ottawa
+Palladian	Pallas
+Parian	Paros
+Parians	Paros
+Parisian	Paris
+Parisians	Paris
+Parthian	Parthia
+Parthians	Parthia
+Patagonian	Patagonia
+Patagonians	Patagonia
+Patmiot	Patmos
+Patmiots	Patmos
+Peloponnesian	Patmos
+Peloponnesi	Patmos
+Pennsylvanian	Pennsylvani
+Pennsylvani	Pennsylvani
+Peruvian	Peru
+Peruvians	Peru
+Petersburgian	Saint Petersburg
+Petersburgi	Saint Petersburg
+Philadelphian	Philadelphi
+Philadelphi	Philadelphi
+Picard	Picardy
+Picards	Picardy
+Piedmontese	Piedmont
+Piedmontese	Piedmont
+Pisan	Pisa
+Pisans	Pisa
+Pittsburgher	Pittsburgh
+Pittsburghe	Pittsburgh
+Pleiad	Pittsburgh
+Pleiads	Pittsburgh
+Plutonian	Pluto
+Plutonians	Pluto
+Pomeranian	Pomerania
+Pomeranians	Pomerania
+Portuguese-Canadian	Canadians
+Praguian	Prague
+Praguians	Prague
+Prince Edward Islander	Prince Edward
+Prince Edward	Prince Edward
+Psarian	Psara
+Psarians	Psara
+Psariot	Psara
+Psariots	Psara
+Puerto Rican	Puerto Rico
+Puerto Ricans	Puerto Rico
+Quebecer	Quebec
+Quebecers	Quebec
+Quebecker	Quebec
+Quebeckers	Quebec
+Quebecois	Quebec
+Quebecois	Quebec
+Québecois	Quebec
+Québécois	Quebec
+Queenslander	Queensland
+Queenslande	Queensland
+Reginan	Regina
+Reginans	Regina
+Rhean	Regina
+Rhinelander	Rhineland
+Rhinelander	Rhineland
+Rhode Islander	Rhode Island
+Rhode Islanders	Rhode Island
+Rhodesian	Rhodesia
+Rhodesians	Rhodesia
+Rhodian	Rhodes
+Rhodians	Rhodes
+Rhodiot	Rhodes
+Rhodiots	Rhodes
+Rican	Rhodes
+Ricans	Rhodes
+Riverian	Rivers State
+Riverians	Rivers State
+Roman	Rome
+Romans	Rome
+Roubaisian	Roubaix
+Roubaisians	Roubaix
+Russian	Russia
+Russians	Russia
+Russian-Canadian	Canadians
+Saint Lucian	Saint Lucia
+Saint Lucians	Saint Lucia
+Salvadoran	Saint Lucia
+Salvadorans	Saint Lucia
+Salzburgian	Salzburg
+Salzburgian	Salzburg
+Samian	Samos
+Samians	Samos
+Samiot	Samos
+Samiots	Samos
+Sammarinese	San Marino
+Sammarinese	San Marino
+Samogitian	Samogitia
+Samogitians	Samogitia
+Sardinian	Sardinia
+Sardinians	Sardinia
+Saskabusher	Sardinia
+Saskabusher	Sardinia
+Saskatchewanian	Saskatchewa
+Saskatchewa	Saskatchewa
+Saskatonian	Saskatoon
+Saskatonian	Saskatoon
+Saturnian	Saturn
+Saturnians	Saturn
+Saxon	Saxony
+Saxons	Saxony
+Scot	Saxony
+Scots	Saxony
+Scotch	Scotland
+Scotlander	Scotland
+Scotlanders	Scotland
+Scots	Scotland
+Scotsman	Scots
+Scotsmen	Scots
+Scotswoman	Scots
+Scotswomen	Scots
+Scottish	Scot
+Seattleite	Seattle
+Seattleites	Seattle
+Selenite	Luna
+Selenites	Luna
+Shetlander	Luna
+Shetlanders	Luna
+Siberian	Siberia
+Siberians	Siberia
+Sicilian	Sicily
+Sicilians	Sicily
+Sikkimese	Sikkim
+Sikkimese	Sikkim
+Silesian	Silesia
+Skyriot	Skyros
+Skyriots	Skyros
+Smithereen	Smithers
+Smithereens	Smithers
+Smyrniot	Smyrna
+Smyrniots	Smyrna
+Sofian	Sofia
+Sofians	Sofia
+South American	Sofia
+South Americans	Sofia
+South Carolinian	South Carolina
+South Carolinians	South Carolina
+South Dakotan	South Dakota
+South Dakotans	South Dakota
+South Walian	South Wales
+South Walians	South Wales
+Spaniard	South Wales
+Spaniards	South Wales
+Spanish	Spain
+Stockholmer	Stockholm
+Stockholmer	Stockholm
+Styrian	Styria
+Styrians	Styria
+Sumatran	Sumatra
+Sumatrans	Sumatra
+Swabian	Swabia
+Swabians	Swabia
+Swede	Sweden
+Swedes	Sweden
+Swedish-Canadian	Swedish
+Sydnesian	Sydney
+Sydnesians	Sydney
+Sydneyite	Sydney
+Sydneyites	Sydney
+Tallinner	Tallinn
+Tallinners	Tallinn
+Tennessean	Tennessee
+Tennesseans	Tennessee
+Tennesseean	Tennessee
+Tennesseean	Tennessee
+Terran	Terra
+Terrans	Terra
+Texan	Texas
+Texans	Texas
+Texpat	Texas
+Texpats	Texas
+Thessalian	Thessaly
+Thessalians	Thessaly
+Thessalonian	Thessaly
+Thessalonia	Thessaly
+Thracian	Thrace
+Thracians	Thrace
+Thuringian	Thuringia
+Thuringians	Thuringia
+Titanian	Titan
+Titanians	Titan
+Tobagonian	Tobago
+Tobagonians	Tobago
+Torontonian	Toronto
+Torontonian	Toronto
+Transylvanian	Transylvani
+Transylvani	Transylvani
+Trinidadian	Trinidad
+Trinidadian	Trinidad
+Tritonian	Trinidad
+Turinese	Trinidad
+Turinese	Trinidad
+Tuscan	Tuscany
+Tuscans	Tuscany
+Tyrolean	Tyrol
+Tyroleans	Tyrol
+Category:en:Demonyms for Americans	Tyrol
+Category:English informal demonyms	Tyrol
+Category:en:Latvian demonyms	Tyrol
+Category:en:Nationalities	Tyrol
+Uke	Tyrol
+Ukes	Tyrol
+Ukie	Tyrol
+Ukies	Tyrol
+Ukrainian	Tyrol
+Ukrainians	Tyrol
+Ukrainian-Canadian	Canadians
+Umbrian	Umbria
+Umbrians	Umbria
+Uranian	Umbria
+Uranians	Umbria
+Utahn	Utah
+Utahns	Utah
+Utican	Utica
+Utonian	Utah
+Utonians	Utah
+Uyghur	Utah
+Uyghurs	Utah
+Vancouverite	Vancouver
+Vancouverit	Vancouver
+Varsovian	Warsaw
+Varsovians	Warsaw
+Venetian	Venetia
+Venetians	Venetia
+Venezuelan	Venezuela
+Venezuelans	Venezuela
+Venusian	Venus
+Venusians	Venus
+Vermonter	Vermont
+Vermonters	Vermont
+Viennese	Vienna
+Viennese	Vienna
+Virginian	Virginia
+Virginians	Virginia
+Wacoan	Waco
+Wacoans	Waco
+Walian	Wales
+Welsh	Wales
+Washingtonian	Washington
+Washingtoni	Washington
+Wellingtonian	Wellington
+Wellingtoni	Wellington
+Welsh	Wales
+Welshman	Welsh
+Welshmen	Welsh
+Welshwoman	Wales
+Welshwomen	Wales
+West Virginian	West Virginia
+West Virginians	West Virginia
+Winnipegger	Winnipeg
+Winnipegger	Winnipeg
+Wisconsinite	Wisconsin
+Wisconsinit	Wisconsin
+Wyomingite	Wyoming
+Wyomingites	Wyoming
+Yellowknifer	Yellowknife
+Yellowknife	Yellowknife
+Yooper	Yellowknife
+Yoopers	Yellowknife
+Yorkshireman	Yellowknife
+Yorkshireme	Yellowknife
+Yorkshirewoman	Yellowknife
+Yorkshirewo	Yellowknife
+Yukoner	Yukon
+Yukoners	Yukon
+Zairean	Zaire
+Zaireans	Zaire
+Zakynthiot	Zakynthos
+Zakynthiots	Zakynthos
+Zantiot	Zante
+Zantiots	Zante
+Zimbabwean	Zimbabwe
+Zimbabweans	Zimbabwe

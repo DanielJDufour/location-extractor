@@ -58,5 +58,23 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(location['name'], "Iraq")
         self.assertEqual(str(location['date']), "2010-01-01 00:00:00+00:00")
 
+    def test_demonym(self):
+        print "starting test_demonym"
+        text = "That guy is English."
+        location = extract_location(text)
+        self.assertEqual(location, "England") 
+
+    def test_demonym2(self):
+        print "starting test_demonym"
+        text = "That guy is Albertan."
+        location = extract_location(text)
+        self.assertEqual(location, "Alberta") 
+
+    def test_spanish(self):
+        text = "Soy es una abanquina"
+        location = extract_location(text)
+        self.assertEqual(location, "Abancay")
+
+
 if __name__ == '__main__':
     unittest.main()

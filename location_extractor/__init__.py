@@ -27,6 +27,7 @@ directory_of_this_file = dirname(realpath(__file__))
 directory_of_keywords = directory_of_this_file + "/keywords"
 languages = listdir(directory_of_keywords)
 
+global dictionary_of_keywords
 dictionary_of_keywords = {}
 
 def flatten(lst):
@@ -42,6 +43,7 @@ def flatten(lst):
     return result
 
 def load_language_into_dictionary_of_keywords(language):
+    global dictionary_of_keywords
     dictionary_of_keywords[language] = {}
     directory_of_language_files = directory_of_keywords + "/" + language
     language_files = listdir(directory_of_language_files)
@@ -53,8 +55,12 @@ def load_language_into_dictionary_of_keywords(language):
             name = filename.split(".")[0]
             #print "filename is", filename
             if filename == "demonyms.txt":
-                #print "d emmeomnymys"
-                pass
+                dictionary_of_keywords[language]['demonyms'] = {}
+                with open(directory_of_language_files + "/" + filename) as f:
+                    for line in f.read().decode("utf-8").strip().split("\n"):
+                        if line:
+                            demonym, place = line.split("\t")
+                            dictionary_of_keywords[language]['demonyms'][demonym] = place
             else:
                 with open(directory_of_language_files + "/" + filename) as f:
                     keywords = [keyword for keyword in f.read().decode("utf-8").strip().split("\n") if keyword]
@@ -62,6 +68,7 @@ def load_language_into_dictionary_of_keywords(language):
                     dictionary_of_keywords[language][name] = keywords
 
 def extract_locations_from_text(text):
+    global dictionary_of_keywords
     print "starting extract_locations_from_text"
     if isinstance(text, str):
         text = text.decode("utf-8")
@@ -88,7 +95,6 @@ def extract_locations_from_text(text):
         if language not in dictionary_of_keywords:
             load_language_into_dictionary_of_keywords(language)
 
-        #print "language =", language
         if language == "English":
 
             d = dictionary_of_keywords[language]
@@ -115,12 +121,12 @@ def extract_locations_from_text(text):
 
             #ignore demonyms for now, because accuracy is not that high
             #Eritreans, Syrian
-            for m in finditer(ur"([A-Z][a-z]{3,}ans?)", text, MULTILINE):
+            for m in finditer(ur"([A-Z][a-z]{3,}(ish|ans|an))", text, MULTILINE):
                 demonym = m.group(0)
                 if "demonyms" in d:
                     if demonym in d['demonyms']:
-                        country = d['demonyms'][demonym]
-                        locations.add(country)
+                        location = d['demonyms'][demonym]
+                        locations.add(location)
 
         elif language == "Arabic":
 
@@ -129,10 +135,29 @@ def extract_locations_from_text(text):
             location_pattern = u"(" + arabic_letter + "{3,}(?: \u0627\u0644" + arabic_letter + "{3,})*)"
             locations.update(flatten(findall(ur"(?:"+ "|".join(d['before']) + ") " + location_pattern, text, flags)))
 
+        elif language == "Spanish":
+            d = dictionary_of_keywords[language]
+            location_pattern = "((?:(?:[A-Z][a-z]+) )?[A-Z][a-z]+|[A-Z]{2,})"
+            locations.update(flatten(findall(ur"(?:(?:[^A-Za-z]|^)(?:"+ "|".join(d['before']) + ") )" + location_pattern, text, flags)))
+            locations.update(flatten(findall(location_pattern + ur" (?:" + "|".join(d['after']) + ")", text, flags)))
+
+            # en una lista
+            locations_pattern = location_pattern + "((?:, " + location_pattern + ")*),? y " + location_pattern
+            pattern = ur"(?:" + "|".join(d['listed']) + ")" + ur"(?: | de |, |, [a-z]* )" + locations_pattern
+            locations.update(flatten(findall(pattern, text, flags)))
+
+            # demonyms / gentilicos
+            for m in finditer(ur"[a-z]{3,}(a|e|o|as|es|os)", text, MULTILINE):
+                demonym = m.group(0)
+                if "demonyms" in d:
+                    if demonym in d['demonyms']:
+                        location = d['demonyms'][demonym]
+                        locations.add(location)
+            
 
     # filter out things we often capture that aren't locations
     # and that are actually names of random places
-    nonlocations = ["January","February","March","April","May","June","July","August","September","October","November","December","Pictures","You","The"]
+    nonlocations = ["January","February","March","April","May","June","July","August","September","October","November","December","Pictures","You","The","Congress","Obama","Republican","Gulf"]
 
     locations = [location for location in locations if location not in nonlocations]
 
@@ -162,31 +187,31 @@ def extract_locations_with_context_from_text(text):
     pattern = "(" + "|".join(names) + ")"
     for matchgroup in finditer(pattern, text, flags):
         name = matchgroup.group(0)
-        #print "name is", name
-        text = matchgroup.string
-        #print "text is", len(text), text[:100]
-        start = matchgroup.start()
-        #print "start is", start
-        end = matchgroup.end()
-        #print "end is", end
-        middle = float(end + start) / 2
-        #print "middle is", middle
-        sentence = [m.group(0) for m in list(finditer("[^\.\n]+",text)) if m.start() < middle < m.end()][0].strip()
-        paragraph = [m.group(0) for m in list(finditer("[^\n]+",text)) if m.start() < middle < m.end()][0].strip()
-        #print "\nparagraph is", paragraph
+        if name:
+            text = matchgroup.string
+            #print "text is", len(text), text[:100]
+            start = matchgroup.start()
+            #print "start is", start
+            end = matchgroup.end()
+            #print "end is", end
+            middle = float(end + start) / 2
+            #print "middle is", middle
+            sentence = [m.group(0) for m in list(finditer("[^\.\n]+",text)) if m.start() < middle < m.end()][0].strip()
+            paragraph = [m.group(0) for m in list(finditer("[^\n]+",text)) if m.start() < middle < m.end()][0].strip()
+            #print "\nparagraph is", paragraph
 
-        dictionary_of_location = {}
+            dictionary_of_location = {}
 
-        dictionary_of_location['name'] = name
+            dictionary_of_location['name'] = name
 
-        dictionary_of_location['date'] = date = extract_date(sentence) or extract_date(paragraph)
+            dictionary_of_location['date'] = date = extract_date(sentence) or extract_date(paragraph)
 
-        if not isJavaScript or not isJavaScript(paragraph):
-            dictionary_of_location['context'] = paragraph
+            if not isJavaScript or not isJavaScript(paragraph):
+                dictionary_of_location['context'] = paragraph
 
-        dictionary_of_location['hash'] = str(date) + "-" + name
+            dictionary_of_location['hash'] = str(date) + "-" + name
 
-        locations.append(dictionary_of_location)
+            locations.append(dictionary_of_location)
 
     # get locations by looking for columns with location keywords in them
     lists = findall("((?:\n^[^\n]{4,20}$){5,})", text, MULTILINE)
