@@ -137,7 +137,7 @@ def extract_locations_from_text(text):
 
         elif language == "Spanish":
             d = dictionary_of_keywords[language]
-            location_pattern = "((?:(?:[A-Z][a-z]+) )?[A-Z][a-z]+|[A-Z]{2,})"
+            location_pattern = "((?:(?:[A-Z][a-z]+) )?(?:de )?[A-Z][a-z]+|[A-Z]{2,})"
             locations.update(flatten(findall(ur"(?:(?:[^A-Za-z]|^)(?:"+ "|".join(d['before']) + ") )" + location_pattern, text, flags)))
             locations.update(flatten(findall(location_pattern + ur" (?:" + "|".join(d['after']) + ")", text, flags)))
 
@@ -221,7 +221,8 @@ def extract_locations_with_context_from_text(text, names=None):
         count = 0
         keywords = []
         for language in dictionary_of_keywords:
-            keywords += dictionary_of_keywords[language]["general"]
+            if "general" in dictionary_of_keywords[language]:
+                keywords += dictionary_of_keywords[language]["general"]
            
         for keyword in keywords: 
             count += text_of_list.count(keyword)
