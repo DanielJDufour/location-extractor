@@ -1,10 +1,18 @@
-border 
+border
+dictator
 eastern 
 defense minister
 finance minister
+guerrilas
+guerilas
+guerrillas
+guerillas
+gorilas
+gorillas
 governor
 national development plan
-northern 
+northern
+president
 prime minister 
 southern 
 western 
