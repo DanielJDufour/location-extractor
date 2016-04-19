@@ -1,0 +1,40 @@
+# words that we see a lot that aren't locations
+
+# Months
+January
+February
+March
+April
+May
+June
+July
+August
+September
+October
+November
+December
+
+# days of the week
+Sunday
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+Saturday
+
+
+At
+Although
+Congress
+Gulf
+Municipalities
+Obama
+Open
+Pictures
+Republican
+Street
+The
+Video
+You
+Zika

@@ -3,24 +3,17 @@ from os import listdir
 from re import findall, finditer, IGNORECASE, MULTILINE, search, sub, UNICODE
 flags = MULTILINE|UNICODE
 
-try:
-    from language_detector import detect_language
-except ImportError:
-    detect_language = None
+try: from language_detector import detect_language
+except ImportError: detect_language = None
 
-try:
-    from date_extractor import extract_date
-except ImportError:
-    extract_date = None
+try: from date_extractor import extract_date
+except ImportError: extract_date = None
 
-try:
-    from bscrp import isJavaScript
-except ImportError:
-    isJavaScript = None
-try:
-    from PyPDF2 import PdfFileReader
-except ImportError:
-    PdfFileReader = None
+try: from bscrp import isJavaScript
+except ImportError: isJavaScript = None
+
+try: from PyPDF2 import PdfFileReader
+except ImportError: PdfFileReader = None
 
 
 directory_of_this_file = dirname(realpath(__file__))
@@ -29,6 +22,16 @@ languages = listdir(directory_of_keywords)
 
 global dictionary_of_keywords
 dictionary_of_keywords = {}
+
+global nonlocations
+nonlocations = []
+
+def load_non_locations():
+    global nonlocations
+    with open(directory_of_this_file + "/nonlocations.txt") as f:
+        for line in f:
+            if line and not line.startswith("#"):
+                nonlocations.append(line.strip())
 
 def flatten(lst):
     result = []
@@ -157,7 +160,8 @@ def extract_locations_from_text(text):
 
     # filter out things we often capture that aren't locations
     # and that are actually names of random places
-    nonlocations = ["January","February","March","April","May","June","July","August","September","October","November","December","Pictures","You","The","Congress","Obama","Republican","Gulf"]
+    if not nonlocations:
+        load_non_locations()
 
     locations = [location for location in locations if location not in nonlocations]
 
