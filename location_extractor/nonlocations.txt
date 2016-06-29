@@ -31,7 +31,9 @@ German
 Spanish
 
 # miscellaneous
+Action
 Agency
+An
 At
 Although
 By
@@ -85,6 +87,7 @@ True
 Video
 Violence
 Vision
+We
 Work
 You
 Zika
