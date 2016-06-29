@@ -291,7 +291,7 @@ def extract_locations_from_pdf(pdf_file):
     return extract_locations_from_text(get_text_from_pdf_file(pdf_file))
 
 def extract_locations_with_context_from_pdf(pdf_file):
-    print "starting extract_locations_with_context_from_pdf"
+    print "starting extract_locations_with_context_from_pdf with", pdf_file
     return extract_locations_with_context_from_text(get_text_from_pdf_file(pdf_file))
 
 def extract_location_with_context(inpt):
