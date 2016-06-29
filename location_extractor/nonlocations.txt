@@ -23,6 +23,13 @@ Thursday
 Friday
 Saturday
 
+# Languages
+Arabic
+English
+French
+German
+Spanish
+
 # miscellaneous
 Agency
 At
