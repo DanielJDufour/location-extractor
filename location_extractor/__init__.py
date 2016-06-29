@@ -102,7 +102,7 @@ def extract_locations_from_text(text):
 
             d = dictionary_of_keywords[language]
 
-            location_pattern = "((?:(?:[A-Z][a-z]+) )?[A-Z][a-z]+|[A-Z]{2,})"
+            location_pattern = "((?:[A-Z][a-z]+|[A-Z]{2,})(?: de)?(?: [A-Z][a-z]+|[A-Z]{2,})?)"
 
             #keyword comes before location
             locations.update(flatten(findall(ur"(?:(?:[^A-Za-z]|^)(?:"+ "|".join(d['before']) + ") )" + location_pattern, text, flags)))
@@ -175,7 +175,7 @@ def extract_location(inpt):
     return extract_locations(inpt)[0]
 
 
-def extract_locations_with_context_from_text(text, names=None):
+def extract_locations_with_context_from_text(text, suggestions=None):
     print "starting extract_locations_with_context_from_text with", type(text)
 
     if not extract_date:
@@ -185,9 +185,10 @@ def extract_locations_with_context_from_text(text, names=None):
     locations = []
 
     # got locations as list of words
-    # you can pass in a list of names if you are supposedly only extracting from that list of names
-    if not names:
-        names = extract_locations(text)
+    names = extract_locations(text)
+    # you can pass in a list of suggested names if you also want to treat those as places
+    if suggestions:
+        names = list(set(names + suggestions))
 
     # find locations and surrounding information including date and paragraph
     pattern = "(" + "|".join(names) + ")"
@@ -307,13 +308,13 @@ def extract_locations(inpt):
         if f.name.endswith(".pdf"):
             return extract_locations_from_pdf(inpt)
 
-def extract_locations_with_context(inpt, names=None):
+def extract_locations_with_context(inpt, suggestions=None):
     print "starting extract_locations_with_context with", type(inpt)
     if isinstance(inpt, str) or isinstance(inpt, unicode):
         if inpt.endswith(".pdf"):
             return extract_locations_with_context_from_pdf(inpt)
         else:
-            return extract_locations_with_context_from_text(inpt, names=names)
+            return extract_locations_with_context_from_text(inpt, suggestions=suggestions)
     elif "file" in str(type(inpt)).lower():
         print "isinstance file"
         if inpt.name.endswith(".pdf"):

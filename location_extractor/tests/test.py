@@ -13,6 +13,11 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(location, "باريس".decode("utf-8"))
 
     def test_english(self):
+
+        text = "Hospital attack sparks new security concerns in Rio de Janeiro"
+        location = extract_location(text)
+        self.assertEqual(location, "Rio de Janeiro")
+
         text = "I arrived in New York on January 4, 2007"
         location = extract_location(text)
         self.assertEqual(location, "New York")
