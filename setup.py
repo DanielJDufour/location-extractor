@@ -5,7 +5,7 @@ setup(
   packages = ['location_extractor'],
   package_dir = {'location_extractor': 'location_extractor'},
   package_data = {'location_extractor': ['__init__.py','keywords/Arabic/before.txt','keywords/Arabic/general.txt','keywords/English/after.txt','keywords/English/before.txt','keywords/English/demonyms.txt','keywords/English/general.txt','keywords/English/listed.txt','keywords/English/possessed.txt','keywords/Spanish/after.txt','keywords/Spanish/before.txt','keywords/Spanish/demonyms.txt','keywords/Spanish/listed.txt','tests/__init__.py','tests/test.py','nonlocations.txt']},
-  version = '4.5',
+  version = '4.6',
   description = 'Extract locations from text',
   author = 'Daniel J. Dufour',
   author_email = 'daniel.j.dufour@gmail.com',

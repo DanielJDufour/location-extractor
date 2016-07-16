@@ -5,6 +5,12 @@ from location_extractor import *
 
 class TestStringMethods(unittest.TestCase):
 
+    def test_counting(self):
+        text = "I was in Germany and then I was in Spain.  Before I was in Germany, I was in Romania."
+        locations = extract_locations_with_context(text)
+        location = [location for location in locations if location['name'] == "Germany"][0]
+        self.assertEqual(location['count'], 2)
+
     def test_arabic(self):
         text = """
         يقول منظمو محادثات التغير المناخي في باريس إنهم اتفقوا على نص مسودة نهائية بعد قرابة أسبوعين من المفاوضات المكثفة.

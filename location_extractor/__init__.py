@@ -254,6 +254,7 @@ def extract_locations_with_context_from_text(text, suggestions=None):
     for location in locations:
         h = location['hash']
         if h in grouped_by_hash:
+            grouped_by_hash[h]['count'] += 1
             #if have same hash, then have same exact location and date, so just need to update context
             if "context" in location and location['context']:
                 if 'context' in grouped_by_hash[h]:
@@ -261,7 +262,7 @@ def extract_locations_with_context_from_text(text, suggestions=None):
                 else:
                     grouped_by_hash[h]['context'] = "\n ... \n" + location['context']
         else:
-            d = {'date': location['date'], 'name': location['name']}
+            d = {'count': 1, 'date': location['date'], 'name': location['name']}
             if "context" in location and location['context']:
                 d['context'] = location['context']
             grouped_by_hash[h] = d
