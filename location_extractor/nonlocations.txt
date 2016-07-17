@@ -63,6 +63,7 @@ Action
 Agency
 Ai
 An
+Anyone
 Annex
 At
 Although
@@ -147,12 +148,14 @@ Table
 Technology 3
 Telephone
 The
+Then
 That
 This
 Tourism
 Transfer
 True
 TV
+Unit
 Video
 Violence
 Vision
