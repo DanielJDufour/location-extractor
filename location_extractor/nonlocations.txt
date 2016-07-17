@@ -1,5 +1,33 @@
 # words that we see a lot that aren't locations
 
+# Single Letters
+A
+B
+C
+D
+E
+F
+G
+H
+I
+J
+K
+L
+M
+N
+O
+P
+Q
+R
+S
+T
+U
+V
+W
+X
+Y
+Z
+
 # Months
 January
 February
@@ -131,6 +159,5 @@ Vision
 We
 Why
 Work
-Y
 You
 Zika
