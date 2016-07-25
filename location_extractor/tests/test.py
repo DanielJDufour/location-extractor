@@ -18,6 +18,13 @@ class TestStringMethods(unittest.TestCase):
         location = extract_location(text)
         self.assertEqual(location, "باريس".decode("utf-8"))
 
+        text= """
+‏عاجل‬  كمعلومات أولية صوت انفجار ضخم يهز ارجاء بلدية السواني يرجح علي انه قصف جوي .. من يملك معلومة يفيدنا بها
+""".decode("utf-8")
+        location = extract_location(text)
+        self.assertEqual(location, "السواني".decode("utf-8"))
+        
+
     def test_english(self):
 
         text = "Hospital attack sparks new security concerns in Rio de Janeiro"
