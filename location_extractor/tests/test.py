@@ -23,7 +23,12 @@ class TestStringMethods(unittest.TestCase):
 """.decode("utf-8")
         location = extract_location(text)
         self.assertEqual(location, "السواني".decode("utf-8"))
-        
+
+        text = """
+القمة العربية في موريتانيا تدعو لتكريس الجهود لحل القضية الفلسطينية"""
+        locations = extract_locations(text)
+        self.assertTrue(u'\u0641\u0644\u0633\u0637\u064a\u0646' in locations)
+        self.assertTrue(u'\u0645\u0648\u0631\u064a\u062a\u0627\u0646\u064a\u0627' in locations)
 
     def test_english(self):
 

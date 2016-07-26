@@ -138,6 +138,12 @@ def extract_locations_from_text(text):
             location_pattern = u"(" + arabic_letter + "{3,}(?: \u0627\u0644" + arabic_letter + "{3,})*)"
             locations.update(flatten(findall(ur"(?:"+ "|".join(d['before']) + ") " + location_pattern, text, flags)))
 
+            # could probably speed this up somehow
+            # will need to speed this up if list gets longer
+            for demonym in d['demonyms']:
+                if demonym in text:
+                    locations.add(d['demonyms'][demonym])
+
         elif language == "Spanish":
             d = dictionary_of_keywords[language]
             location_pattern = "((?:(?:[A-Z][a-z]+) )?(?:de )?[A-Z][a-z]+|[A-Z]{2,})"
