@@ -168,6 +168,7 @@ def extract_locations_from_text(text):
 
     #convert locations to a list
     locations = list(locations)
+    print "finishing extract_locations_from_text with", len(locations), "locations"
     return locations
 
 def extract_location(inpt):
@@ -193,17 +194,15 @@ def extract_locations_with_context_from_text(text, suggestions=None):
     # find locations and surrounding information including date and paragraph
     pattern = "(" + "|".join(names) + ")"
     for matchgroup in finditer(pattern, text, flags):
+        #print "matchgroup:", matchgroup
         name = matchgroup.group(0)
         if name:
             text = matchgroup.string
             #print "text is", len(text), text[:100]
-            start = matchgroup.start()
-            #print "start is", start
-            end = matchgroup.end()
-            #print "end is", end
-            middle = float(end + start) / 2
+            middle = float(matchgroup.end() + matchgroup.start()) / 2
             #print "middle is", middle
             sentence = [m.group(0) for m in list(finditer("[^\.\n]+",text)) if m.start() < middle < m.end()][0].strip()
+            #print "sentence:", sentence
             paragraph = [m.group(0) for m in list(finditer("[^\n]+",text)) if m.start() < middle < m.end()][0].strip()
             #print "\nparagraph is", paragraph
 
