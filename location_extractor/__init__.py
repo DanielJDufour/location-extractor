@@ -67,12 +67,13 @@ def load_language_into_dictionary_of_keywords(language):
             else:
                 with open(directory_of_language_files + "/" + filename) as f:
                     keywords = [keyword for keyword in f.read().decode("utf-8").strip().split("\n") if keyword]
+                    #print "keywords:", keywords
                     keywords += [keyword.title() for keyword in keywords]
                     dictionary_of_keywords[language][name] = keywords
 
-def extract_locations_from_text(text):
+def extract_locations_from_text(text, return_demonyms=False):
     global dictionary_of_keywords
-    print "starting extract_locations_from_text"
+    #print "starting extract_locations_from_text"
     if isinstance(text, str):
         text = text.decode("utf-8")
 
@@ -92,6 +93,7 @@ def extract_locations_from_text(text):
     #print "languages = ", languages
 
     locations = set()
+    demonyms = []
 
     for language in languages:
 
@@ -126,10 +128,9 @@ def extract_locations_from_text(text):
             #Eritreans, Syrian
             for m in finditer(ur"([A-Z][a-z]{3,}(ish|ans|an))", text, MULTILINE):
                 demonym = m.group(0)
-                if "demonyms" in d:
-                    if demonym in d['demonyms']:
-                        location = d['demonyms'][demonym]
-                        locations.add(location)
+                if demonym in d['demonyms']:
+                    location = d['demonyms'][demonym]
+                    demonyms.append({"demonym": demonym, "location": location})
 
         elif language == "Arabic":
 
@@ -142,7 +143,8 @@ def extract_locations_from_text(text):
             # will need to speed this up if list gets longer
             for demonym in d['demonyms']:
                 if demonym in text:
-                    locations.add(d['demonyms'][demonym])
+                    location = d['demonyms'][demonym]
+                    demonyms.append({"demonym": demonym, "location": location})
 
         elif language == "Spanish":
             d = dictionary_of_keywords[language]
@@ -158,10 +160,9 @@ def extract_locations_from_text(text):
             # demonyms / gentilicos
             for m in finditer(ur"[a-z]{3,}(a|e|o|as|es|os)", text, MULTILINE):
                 demonym = m.group(0)
-                if "demonyms" in d:
-                    if demonym in d['demonyms']:
-                        location = d['demonyms'][demonym]
-                        locations.add(location)
+                if demonym in d['demonyms']:
+                    location = d['demonyms'][demonym]
+                    demonyms.append({"demonym": demonym, "location": location})
             
 
     # filter out things we often capture that aren't locations
@@ -169,12 +170,19 @@ def extract_locations_from_text(text):
     if not nonlocations:
         load_non_locations()
 
+
     locations = [location for location in locations if location not in nonlocations]
 
 
     #convert locations to a list
     locations = list(locations)
-    print "finishing extract_locations_from_text with", len(locations), "locations"
+
+    if return_demonyms:
+        locations = locations + demonyms
+    else:
+        locations = list(set(locations + [d['location'] for d in demonyms]))
+
+    print "finishing extract_locations_from_text with", len(locations), "locations", locations
     return locations
 
 def extract_location(inpt):
@@ -183,7 +191,7 @@ def extract_location(inpt):
 
 
 def extract_locations_with_context_from_text(text, suggestions=None):
-    print "starting extract_locations_with_context_from_text with", type(text)
+    #print "starting extract_locations_with_context_from_text with", type(text)
 
     if not extract_date:
         raise Exception("You must have date-extractor installed to use this method.  To fix the problem, run: pip install date-extractor")
@@ -192,13 +200,23 @@ def extract_locations_with_context_from_text(text, suggestions=None):
     locations = []
 
     # got locations as list of words
-    names = extract_locations(text)
+    extracted_names = extract_locations_from_text(text, return_demonyms=True)
+    demonym_to_location = {}
+    names = []
+    for name in extracted_names:
+        if isinstance(name, dict):
+            demonym_to_location[name['demonym']] = name['location']
+            names.append(name['demonym'])
+        else:
+            names.append(name)
+        
+
     # you can pass in a list of suggested names if you also want to treat those as places
     if suggestions:
         names = list(set(names + suggestions))
 
     # find locations and surrounding information including date and paragraph
-    pattern = "(" + "|".join(names) + ")"
+    pattern = u"(" + u"|".join(names) + u")"
     for matchgroup in finditer(pattern, text, flags):
         #print "matchgroup:", matchgroup
         name = matchgroup.group(0)
@@ -213,6 +231,10 @@ def extract_locations_with_context_from_text(text, suggestions=None):
             #print "\nparagraph is", paragraph
 
             dictionary_of_location = {}
+
+
+            if name in demonym_to_location:
+                name = demonym_to_location[name]
 
             dictionary_of_location['name'] = name
 
@@ -274,6 +296,7 @@ def extract_locations_with_context_from_text(text, suggestions=None):
  
     locations = grouped_by_hash.values()
 
+    print "finishing extract_locations_with_context_from_text with", list(locations)[:5]
     return locations
        
 def extract_locations_from_path_to_pdf(path_to_pdf):
