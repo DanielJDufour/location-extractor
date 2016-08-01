@@ -18,10 +18,14 @@ except ImportError: PdfFileReader = None
 
 directory_of_this_file = dirname(realpath(__file__))
 directory_of_keywords = directory_of_this_file + "/keywords"
+directory_of_letters = directory_of_this_file + "/letters"
 languages = listdir(directory_of_keywords)
 
 global dictionary_of_keywords
 dictionary_of_keywords = {}
+
+global dictionary_of_letters
+dictionary_of_letters = {}
 
 global nonlocations
 nonlocations = []
@@ -70,6 +74,20 @@ def load_language_into_dictionary_of_keywords(language):
                     #print "keywords:", keywords
                     keywords += [keyword.title() for keyword in keywords]
                     dictionary_of_keywords[language][name] = keywords
+
+def load_language_into_dictionary_of_letters(language):
+    global dictionary_of_letters
+    letters = set()
+    with open(directory_of_letters + "/" + language + ".txt") as f:
+        for line in f.read().decode("utf-8").strip().split("\n"):
+            if line:
+                letter = line.strip()
+                if letter and letter != " ":
+                    letters.add(letter)
+    dictionary_of_letters[language] = list(letters)
+
+    
+    
 
 def extract_locations_from_text(text, return_demonyms=False):
     global dictionary_of_keywords
@@ -134,10 +152,15 @@ def extract_locations_from_text(text, return_demonyms=False):
 
         elif language == "Arabic":
 
+            if language not in dictionary_of_letters:
+                load_language_into_dictionary_of_letters(language)
+            letters = dictionary_of_letters[language]
             d = dictionary_of_keywords[language]
-            arabic_letter = u"[\u0600-\u061E\u0620-\u06EF\u06FA-\u06FF]"
-            location_pattern = u"(" + arabic_letter + "{3,}(?: \u0627\u0644" + arabic_letter + "{3,})*)"
+            arabic_letter = u"[" + "".join(letters) + "]"
+	    location_pattern = u"(" + arabic_letter + u"{3,}(?: \u0627\u0644" + arabic_letter + u"{3,})*)"
+            
             locations.update(flatten(findall(ur"(?:"+ "|".join(d['before']) + ") " + location_pattern, text, flags)))
+            locations.update(flatten(findall(location_pattern + ur" (?:" + "|".join(d['after']) + ")", text, flags))) # we're using space or underscore bc of tweets
 
             # could probably speed this up somehow
             # will need to speed this up if list gets longer
@@ -182,7 +205,7 @@ def extract_locations_from_text(text, return_demonyms=False):
     else:
         locations = list(set(locations + [d['location'] for d in demonyms]))
 
-    print "finishing extract_locations_from_text with", len(locations), "locations", locations
+    #print "finishing extract_locations_from_text with", len(locations), "locations", locations
     return locations
 
 def extract_location(inpt):
@@ -296,7 +319,7 @@ def extract_locations_with_context_from_text(text, suggestions=None):
  
     locations = grouped_by_hash.values()
 
-    print "finishing extract_locations_with_context_from_text with", list(locations)[:5]
+    #print "finishing extract_locations_with_context_from_text with", list(locations)[:5]
     return locations
        
 def extract_locations_from_path_to_pdf(path_to_pdf):
@@ -317,11 +340,11 @@ def get_text_from_pdf_file(pdf_file):
     return text
  
 def extract_locations_from_pdf(pdf_file):
-    print "starting extract_locations_from_pdf"
+    #print "starting extract_locations_from_pdf"
     return extract_locations_from_text(get_text_from_pdf_file(pdf_file))
 
 def extract_locations_with_context_from_pdf(pdf_file):
-    print "starting extract_locations_with_context_from_pdf with", pdf_file
+    #print "starting extract_locations_with_context_from_pdf with", pdf_file
     return extract_locations_with_context_from_text(get_text_from_pdf_file(pdf_file))
 
 def extract_location_with_context(inpt):
@@ -338,14 +361,14 @@ def extract_locations(inpt):
             return extract_locations_from_pdf(inpt)
 
 def extract_locations_with_context(inpt, suggestions=None):
-    print "starting extract_locations_with_context with", type(inpt)
+    #print "starting extract_locations_with_context with", type(inpt)
     if isinstance(inpt, str) or isinstance(inpt, unicode):
         if inpt.endswith(".pdf"):
             return extract_locations_with_context_from_pdf(inpt)
         else:
             return extract_locations_with_context_from_text(inpt, suggestions=suggestions)
     elif "file" in str(type(inpt)).lower():
-        print "isinstance file"
+        #print "isinstance file"
         if inpt.name.endswith(".pdf"):
             return extract_locations_with_context_from_pdf(inpt)
 
