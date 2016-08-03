@@ -30,6 +30,12 @@ class TestStringMethods(unittest.TestCase):
         self.assertTrue(u'\u0641\u0644\u0633\u0637\u064a\u0646' in locations)
         self.assertTrue(u'\u0645\u0648\u0631\u064a\u062a\u0627\u0646\u064a\u0627' in locations)
 
+        # eastern ghouta
+        text = u"\u0023\u0627\u0644\u063a\u0648\u0637\u0629 \u0627\u0644\u0634\u0631\u0642\u064a\u0629"
+        location = extract_location(text)
+        self.assertEqual(location, u"\u0627\u0644\u063a\u0648\u0637\u0629")
+
+
     def test_english(self):
 
         text = "Hospital attack sparks new security concerns in Rio de Janeiro"
@@ -49,9 +55,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(location, "New Jersey")
 
         text = "Cities of San Antonio, Dallas and Austin make up the...."
-        print "text is", text
         locations = extract_locations(text)
-        print "location sare", locations
         self.assertTrue("Austin" in locations)
         self.assertTrue("Dallas" in locations)
         self.assertTrue("San Antonio" in locations)
@@ -87,13 +91,13 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(str(location['date']), "2010-01-01 00:00:00+00:00")
 
     def test_demonym(self):
-        print "starting test_demonym"
+        #print "starting test_demonym"
         text = "That guy is English."
         location = extract_location(text)
         self.assertEqual(location, "England") 
 
     def test_demonym2(self):
-        print "starting test_demonym"
+        #print "starting test_demonym"
         text = "That guy is Albertan."
         location = extract_location(text)
         self.assertEqual(location, "Alberta") 
