@@ -73,7 +73,7 @@ def load_language_into_dictionary_of_keywords(language):
 
 def extract_locations_from_text(text, return_demonyms=False):
     global dictionary_of_keywords
-    #print "starting extract_locations_from_text"
+    print "starting extract_locations_from_text"
     if isinstance(text, str):
         text = text.decode("utf-8")
 
@@ -122,7 +122,6 @@ def extract_locations_from_text(text, return_demonyms=False):
             #print "text is", text
             #print "pattern is", pattern
             locations.update(flatten(findall(pattern, text, flags)))
-            #print "locations are", locations
 
             #ignore demonyms for now, because accuracy is not that high
             #Eritreans, Syrian
@@ -163,7 +162,6 @@ def extract_locations_from_text(text, return_demonyms=False):
                 if demonym in d['demonyms']:
                     location = d['demonyms'][demonym]
                     demonyms.append({"demonym": demonym, "location": location})
-            
 
     # filter out things we often capture that aren't locations
     # and that are actually names of random places
@@ -177,12 +175,18 @@ def extract_locations_from_text(text, return_demonyms=False):
     #convert locations to a list
     locations = list(locations)
 
+    #sometimes accidentally picked up a demonymn as a location for a foreign language
+    #for example, he is a Libyan will think Libyan is a location because places follow a in Spanish
+    list_of_found_demonyms = [d['demonym'] for d in demonyms]
+    locations = [location for location in locations if location not in list_of_found_demonyms]
+    
+
     if return_demonyms:
         locations = locations + demonyms
     else:
         locations = list(set(locations + [d['location'] for d in demonyms]))
 
-    print "finishing extract_locations_from_text with", len(locations), "locations", locations
+    print "finishing extract_locations_from_text with", len(locations), "locations", locations[:5]
     return locations
 
 def extract_location(inpt):
@@ -191,7 +195,7 @@ def extract_location(inpt):
 
 
 def extract_locations_with_context_from_text(text, suggestions=None):
-    #print "starting extract_locations_with_context_from_text with", type(text)
+    print "starting extract_locations_with_context_from_text with", type(text)
 
     if not extract_date:
         raise Exception("You must have date-extractor installed to use this method.  To fix the problem, run: pip install date-extractor")

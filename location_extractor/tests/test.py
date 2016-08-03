@@ -73,6 +73,11 @@ class TestStringMethods(unittest.TestCase):
         self.assertTrue("Chicago" in locations)
         self.assertTrue("Atlantic City" in locations)
 
+        text = "He is a Libyan."
+        locations = extract_locations(text)
+        self.assertEqual(len(locations), 1)
+        self.assertEqual(locations[0], "Libya")
+
     def test_english_with_context(self):
         text = """
         President Obama has used Oval Office speeches sparingly, compared with previous presidents. His previous two addresses, both in 2010, covered the Deepwater Horizon oil spill and the end of combat operations in Iraq.

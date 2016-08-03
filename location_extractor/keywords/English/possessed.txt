@@ -1,4 +1,5 @@
 border
+crisis
 dictator
 eastern 
 defense minister
