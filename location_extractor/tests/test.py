@@ -5,6 +5,12 @@ from location_extractor import *
 
 class TestStringMethods(unittest.TestCase):
 
+
+    def test_abbreviations(self):
+        text = "I was in NJ over the weekend."
+        location = extract_location_with_context(text)
+        self.assertEqual(location['name'], "New Jersey")
+
     def test_counting(self):
         text = "I was in Germany and then I was in Spain.  Before I was in Germany, I was in Romania."
         locations = extract_locations_with_context(text)

@@ -68,6 +68,15 @@ def load_language_into_dictionary_of_keywords(language):
                         if line:
                             demonym, place = line.split("\t")
                             dictionary_of_keywords[language]['demonyms'][demonym] = place
+
+            elif filename == "abbreviations.txt":
+                dictionary_of_keywords[language]['abbreviations'] = {}
+                with open(directory_of_language_files + "/" + filename) as f:
+                    for line in f.read().decode("utf-8").strip().split("\n"):
+                        if line:
+                            abbreviation, place = line.split("\t")
+                            dictionary_of_keywords[language]['abbreviations'][abbreviation] = place
+ 
             else:
                 with open(directory_of_language_files + "/" + filename) as f:
                     keywords = [keyword for keyword in f.read().decode("utf-8").strip().split("\n") if keyword]
@@ -86,12 +95,10 @@ def load_language_into_dictionary_of_letters(language):
                     letters.add(letter)
     dictionary_of_letters[language] = list(letters)
 
-    
-    
 
-def extract_locations_from_text(text, return_demonyms=False):
+def extract_locations_from_text(text, return_demonyms=False, return_abbreviations=False):
     global dictionary_of_keywords
-    print "starting extract_locations_from_text"
+    #print "starting extract_locations_from_text"
     if isinstance(text, str):
         text = text.decode("utf-8")
 
@@ -112,6 +119,7 @@ def extract_locations_from_text(text, return_demonyms=False):
 
     locations = set()
     demonyms = []
+    abbreviations = []
 
     for language in languages:
 
@@ -148,6 +156,13 @@ def extract_locations_from_text(text, return_demonyms=False):
                 if demonym in d['demonyms']:
                     location = d['demonyms'][demonym]
                     demonyms.append({"demonym": demonym, "location": location})
+
+            for m in finditer(ur"([A-Z]{2})", text, MULTILINE):
+                abbreviation = m.group(0)
+                if abbreviation in d['abbreviations']:
+                    location = d['abbreviations'][abbreviation]
+                    abbreviations.append({"abbreviation": abbreviation, "location": location})
+
 
         elif language == "Arabic":
 
@@ -203,9 +218,14 @@ def extract_locations_from_text(text, return_demonyms=False):
     list_of_found_demonyms = [d['demonym'] for d in demonyms]
     locations = [location for location in locations if location not in list_of_found_demonyms]
     
-
-    if return_demonyms:
-        locations = locations + demonyms
+    list_of_found_abbreviations = [d['abbreviation'] for d in abbreviations]
+    locations = [location for location in locations if location not in list_of_found_abbreviations]
+ 
+    if return_demonyms or return_abbreviations:
+        if return_demonyms:
+            locations += demonyms
+        if return_abbreviations:
+            locations += abbreviations
     else:
         locations = list(set(locations + [d['location'] for d in demonyms]))
 
@@ -218,7 +238,7 @@ def extract_location(inpt):
 
 
 def extract_locations_with_context_from_text(text, suggestions=None):
-    print "starting extract_locations_with_context_from_text with", type(text)
+    #print "starting extract_locations_with_context_from_text with", type(text)
 
     if not extract_date:
         raise Exception("You must have date-extractor installed to use this method.  To fix the problem, run: pip install date-extractor")
@@ -227,16 +247,20 @@ def extract_locations_with_context_from_text(text, suggestions=None):
     locations = []
 
     # got locations as list of words
-    extracted_names = extract_locations_from_text(text, return_demonyms=True)
+    extracted_names = extract_locations_from_text(text, return_demonyms=True, return_abbreviations=True)
     demonym_to_location = {}
+    abbreviation_to_location = {}
     names = []
     for name in extracted_names:
         if isinstance(name, dict):
-            demonym_to_location[name['demonym']] = name['location']
-            names.append(name['demonym'])
+            if "demonym" in name:
+                demonym_to_location[name['demonym']] = name['location']
+                names.append(name['demonym'])
+            if "abbreviation" in name:
+                abbreviation_to_location[name['abbreviation']] = name['location']
+                names.append(name['abbreviation'])
         else:
             names.append(name)
-        
 
     # you can pass in a list of suggested names if you also want to treat those as places
     if suggestions:
@@ -262,6 +286,9 @@ def extract_locations_with_context_from_text(text, suggestions=None):
 
             if name in demonym_to_location:
                 name = demonym_to_location[name]
+
+            if name in abbreviation_to_location:
+                name = abbreviation_to_location[name]
 
             dictionary_of_location['name'] = name
 
