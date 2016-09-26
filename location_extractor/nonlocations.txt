@@ -37,6 +37,7 @@ May
 June
 July
 August
+Sept
 September
 October
 November
@@ -176,6 +177,7 @@ The Times
 Then
 That
 This
+Time
 Tourism
 Transfer
 True
