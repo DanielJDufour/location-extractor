@@ -157,7 +157,7 @@ def extract_locations_from_text(text, return_demonyms=False, return_abbreviation
                     location = d['demonyms'][demonym]
                     demonyms.append({"demonym": demonym, "location": location})
 
-            for m in finditer(ur"([A-Z]{2})", text, MULTILINE):
+            for m in finditer(ur"(?<=[ ])([A-Z]{2})(?=[ .,])", text, MULTILINE):
                 abbreviation = m.group(0)
                 if abbreviation in d['abbreviations']:
                     location = d['abbreviations'][abbreviation]
