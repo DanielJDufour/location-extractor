@@ -1,10 +1,22 @@
 #-*- coding: utf-8 -*-
-import unittest
+import signal, unittest
 from datetime import datetime
 from location_extractor import *
 from os.path import abspath, dirname
 
 path_to_directory_of_this_file = dirname(realpath(__file__))
+
+class timeout:
+    def __init__(self, seconds=1, error_message='Timeout'):
+        self.seconds = seconds
+        self.error_message = error_message
+    def handle_timeout(self, signum, frame):
+        raise OSError(self.error_message)
+    def __enter__(self):
+        signal.signal(signal.SIGALRM, self.handle_timeout)
+        signal.alarm(self.seconds)
+    def __exit__(self, type, value, traceback):
+        signal.alarm(0)
 
 class TestStringMethods(unittest.TestCase):
 
@@ -13,7 +25,29 @@ class TestStringMethods(unittest.TestCase):
         text = "Bla bla bla       Madison Heights MI      Lorem Ipsum bla bla bla"
         locations = extract_locations_with_context(text)
         print "heights locations:", locations
-         
+
+    """
+    def test_performance(self):
+        with open(path_to_directory_of_this_file + "/performance.txt") as f:
+            text = f.read()
+            start = datetime.now()
+            with timeout(seconds=3):
+                locations = extract_locations_with_context(text, debug=True)
+            seconds_took = (datetime.now() - start).total_seconds()
+            self.assertEqual(seconds_took < 30)
+    """
+
+    def test_max_seconds(self):
+        with open(path_to_directory_of_this_file + "/performance.txt") as f:
+            text = f.read()
+            start = datetime.now()
+            with timeout(seconds=10):
+                locations = extract_locations_with_context(text, debug=False, max_seconds=1)
+            seconds_took = (datetime.now() - start).total_seconds()
+            self.assertTrue(seconds_took < 10)
+            self.assertTrue(len(locations) > 10)
+
+
 
     # like San Cristobal or La Puente
     def test_composite_names(self):

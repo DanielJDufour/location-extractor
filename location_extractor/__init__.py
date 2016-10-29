@@ -2,6 +2,7 @@ from datetime import datetime
 from os.path import dirname, realpath
 from os import listdir
 from re import findall, finditer, IGNORECASE, MULTILINE, search, sub, UNICODE
+import signal
 flags = MULTILINE|UNICODE
 
 try: from language_detector import detect_language
@@ -30,6 +31,18 @@ dictionary_of_letters = {}
 
 global nonlocations
 nonlocations = []
+
+class timeout:
+    def __init__(self, seconds=1, error_message='Timeout'):
+        self.seconds = seconds
+        self.error_message = error_message
+    def handle_timeout(self, signum, frame):
+        raise OSError(self.error_message)
+    def __enter__(self):
+        signal.signal(signal.SIGALRM, self.handle_timeout)
+        signal.alarm(self.seconds)
+    def __exit__(self, type, value, traceback):
+        signal.alarm(0)
 
 def load_non_locations():
     global nonlocations
@@ -240,7 +253,7 @@ def extract_location(inpt):
     return extract_locations(inpt)[0]
 
 
-def extract_locations_with_context_from_text(text, suggestions=None, ignore_these_names=None):
+def extract_locations_with_context_from_text(text, suggestions=None, ignore_these_names=None, debug=False, max_seconds=999):
     #print "starting extract_locations_with_context_from_text with", type(text)
     start = datetime.now()
 
@@ -254,6 +267,9 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
     extracted_names = extract_locations_from_text(text, return_demonyms=True, return_abbreviations=True)
     if ignore_these_names:
         extracted_names = [name for name in extracted_names if name not in ignore_these_names]
+
+    if debug:
+        print "extracted_names:", extracted_names
 
     demonym_to_location = {}
     abbreviation_to_location = {}
@@ -271,62 +287,79 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
 
     # you can pass in a list of suggested names if you also want to treat those as places
     if suggestions:
-        names = list(set(names + suggestions))
-
-    # find locations and surrounding information including date and paragraph
-    pattern = u"(" + u"|".join(names) + u")"
-    for matchgroup in finditer(pattern, text, flags):
-        #print "matchgroup:", matchgroup
-        name = matchgroup.group(0)
-        if name:
-            text = matchgroup.string
-            #print "text is", len(text), text[:100]
-            middle = float(matchgroup.end() + matchgroup.start()) / 2
-            #print "middle is", middle
-            sentence = [m.group(0) for m in list(finditer("[^\.\n]+",text)) if m.start() < middle < m.end()][0].strip()
-            #print "sentence:", sentence
-            paragraph = [m.group(0) for m in list(finditer("[^\n]+",text)) if m.start() < middle < m.end()][0].strip()
-            #print "\nparagraph is", paragraph
-
-            dictionary_of_location = {}
+        names = set(names + suggestions)
 
 
-            if name in demonym_to_location:
-                name = demonym_to_location[name]
+    try:
+        with timeout(seconds=max_seconds):
+            if debug: print "[location_extractor] finding locations and surrounding information including date and paragraph"
+            pattern = u"(" + u"|".join(names) + u")"
+            if debug: counter = -1
+            if debug: times_taken = []
+            sentences = [{'text': m.group(0), 'start': m.start(), 'end': m.end() } for m in finditer("[^\.\n]+", text)]
+            paragraphs = [{'text': m.group(0), 'start': m.start(), 'end': m.end() } for m in finditer("[^\n]+", text)]
+            demonym_to_location_keys = demonym_to_location.keys()
+            abbreviation_to_location_keys = abbreviation_to_location.keys()
+            for matchgroup in finditer(pattern, text, flags):
+                if debug:
+                    start_time_for_mg = datetime.now()
+                    counter += 1
+                    print "matchgroup:", counter
+                name = matchgroup.group(0)
+                if name:
+                    middle = float(matchgroup.end() + matchgroup.start()) / 2
+                    for s in sentences:
+                        if s['start'] < middle < s['end']:
+                            sentence = s['text'].strip()
+                            break
 
-            if name in abbreviation_to_location:
-                name = abbreviation_to_location[name]
+                    for p in paragraphs:
+                        if p['start'] < middle < p['end']:
+                            paragraph = p['text'].strip()
+                            break
 
-            dictionary_of_location['name'] = name
+                    dictionary_of_location = {}
 
-            dictionary_of_location['date'] = date = extract_date(sentence) or extract_date(paragraph)
+                    if name in demonym_to_location_keys:
+                        name = demonym_to_location[name]
+                    elif name in abbreviation_to_location_keys:
+                        name = abbreviation_to_location[name]
 
-            if not isJavaScript or not isJavaScript(paragraph):
-                dictionary_of_location['context'] = paragraph
+                    dictionary_of_location['name'] = name
 
-            dictionary_of_location['hash'] = str(date) + "-" + name
+                    dictionary_of_location['date'] = date = extract_date(sentence) or extract_date(paragraph)
 
-            locations.append(dictionary_of_location)
+                    if not isJavaScript or not isJavaScript(paragraph):
+                        dictionary_of_location['context'] = paragraph
 
-    # get locations by looking for columns with location keywords in them
-    lists = findall("((?:\n^[^\n]{4,20}$){5,})", text, MULTILINE)
-    for text_of_list in lists:
-        count = 0
-        keywords = []
-        for language in dictionary_of_keywords:
-            if "general" in dictionary_of_keywords[language]:
-                keywords += dictionary_of_keywords[language]["general"]
+                    dictionary_of_location['hash'] = str(date) + "-" + name
+
+                    locations.append(dictionary_of_location)
+                if debug:
+                    times_taken.append((datetime.now() - start_time_for_mg).total_seconds())
+                    print "average_time_taken:", sum(times_taken) / len(times_taken), "seconds"
+
+            if debug: print "[location-extractor] get locations by looking for columns with location keywords in them"
+            lists = findall("((?:\n^[^\n]{4,20}$){5,})", text, MULTILINE)
+            for text_of_list in lists:
+                count = 0
+                keywords = []
+                for language in dictionary_of_keywords:
+                    if "general" in dictionary_of_keywords[language]:
+                        keywords += dictionary_of_keywords[language]["general"]
            
-        for keyword in keywords: 
-            count += text_of_list.count(keyword)
+                for keyword in keywords: 
+                    count += text_of_list.count(keyword)
 
-        if count > 5:
-            lines = text_of_list.split("\n")
-            names = [line for line in lines if line and len(line) > 4 and line not in keywords]
+                if count > 5:
+                    lines = text_of_list.split("\n")
+                    names = [line for line in lines if line and len(line) > 4 and line not in keywords]
 
-            for name in names:
-                date = extract_date(text_of_list)
-                locations.append({"name": name, "date": date, "hash": str(date) + "-" + name, "context": name})
+                    for name in names:
+                        date = extract_date(text_of_list)
+                        locations.append({"name": name, "date": date, "hash": str(date) + "-" + name, "context": name})
+    except OSError:
+        print "[location_extractor] timed out extracting with context, so proceeding with what we got so far"
 
     names = [location['name'] for location in locations]
 
@@ -399,13 +432,13 @@ def extract_locations(inpt):
         if f.name.endswith(".pdf"):
             return extract_locations_from_pdf(inpt)
 
-def extract_locations_with_context(inpt, suggestions=None, ignore_these_names=[]):
+def extract_locations_with_context(inpt, suggestions=None, ignore_these_names=[], debug=False, max_seconds=999):
     #print "starting extract_locations_with_context with", type(inpt)
     if isinstance(inpt, str) or isinstance(inpt, unicode):
         if inpt.endswith(".pdf"):
             return extract_locations_with_context_from_pdf(inpt)
         else:
-            return extract_locations_with_context_from_text(inpt, suggestions=suggestions, ignore_these_names=ignore_these_names)
+            return extract_locations_with_context_from_text(inpt, suggestions=suggestions, ignore_these_names=ignore_these_names, debug=debug, max_seconds=max_seconds)
     elif "file" in str(type(inpt)).lower():
         #print "isinstance file"
         if inpt.name.endswith(".pdf"):
