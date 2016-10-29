@@ -1,3 +1,4 @@
+from datetime import datetime
 from os.path import dirname, realpath
 from os import listdir
 from re import findall, finditer, IGNORECASE, MULTILINE, search, sub, UNICODE
@@ -98,6 +99,7 @@ def load_language_into_dictionary_of_letters(language):
 
 def extract_locations_from_text(text, return_demonyms=False, return_abbreviations=False):
     global dictionary_of_keywords
+    start = datetime.now()
     #print "starting extract_locations_from_text"
     if isinstance(text, str):
         text = text.decode("utf-8")
@@ -229,6 +231,7 @@ def extract_locations_from_text(text, return_demonyms=False, return_abbreviation
     else:
         locations = list(set(locations + [d['location'] for d in demonyms]))
 
+    print "extracting locations from text took", (datetime.now() - start).total_seconds(), "seconds"
     #print "finishing extract_locations_from_text with", len(locations), "locations", locations[:5]
     return locations
 
@@ -237,8 +240,9 @@ def extract_location(inpt):
     return extract_locations(inpt)[0]
 
 
-def extract_locations_with_context_from_text(text, suggestions=None):
+def extract_locations_with_context_from_text(text, suggestions=None, ignore_these_names=None):
     #print "starting extract_locations_with_context_from_text with", type(text)
+    start = datetime.now()
 
     if not extract_date:
         raise Exception("You must have date-extractor installed to use this method.  To fix the problem, run: pip install date-extractor")
@@ -248,6 +252,9 @@ def extract_locations_with_context_from_text(text, suggestions=None):
 
     # got locations as list of words
     extracted_names = extract_locations_from_text(text, return_demonyms=True, return_abbreviations=True)
+    if ignore_these_names:
+        extracted_names = [name for name in extracted_names if name not in ignore_these_names]
+
     demonym_to_location = {}
     abbreviation_to_location = {}
     names = []
@@ -350,6 +357,7 @@ def extract_locations_with_context_from_text(text, suggestions=None):
  
     locations = grouped_by_hash.values()
 
+    print "extracting locations with context from text took", (datetime.now() - start).total_seconds(), "seconds"
     #print "finishing extract_locations_with_context_from_text with", list(locations)[:5]
     return locations
        
@@ -391,13 +399,13 @@ def extract_locations(inpt):
         if f.name.endswith(".pdf"):
             return extract_locations_from_pdf(inpt)
 
-def extract_locations_with_context(inpt, suggestions=None):
+def extract_locations_with_context(inpt, suggestions=None, ignore_these_names=[]):
     #print "starting extract_locations_with_context with", type(inpt)
     if isinstance(inpt, str) or isinstance(inpt, unicode):
         if inpt.endswith(".pdf"):
             return extract_locations_with_context_from_pdf(inpt)
         else:
-            return extract_locations_with_context_from_text(inpt, suggestions=suggestions)
+            return extract_locations_with_context_from_text(inpt, suggestions=suggestions, ignore_these_names=ignore_these_names)
     elif "file" in str(type(inpt)).lower():
         #print "isinstance file"
         if inpt.name.endswith(".pdf"):

@@ -2,9 +2,26 @@
 import unittest
 from datetime import datetime
 from location_extractor import *
+from os.path import abspath, dirname
+
+path_to_directory_of_this_file = dirname(realpath(__file__))
 
 class TestStringMethods(unittest.TestCase):
 
+
+    def test_height(self):
+        text = "Bla bla bla       Madison Heights MI      Lorem Ipsum bla bla bla"
+        locations = extract_locations_with_context(text)
+        print "heights locations:", locations
+         
+
+    # like San Cristobal or La Puente
+    def test_composite_names(self):
+        with open(path_to_directory_of_this_file + "/sample.txt") as f:
+            text = f.read()
+            locations = extract_locations_with_context(text)
+            #for location in locations:
+            #    print "\n", location['name'], " : ", (location['context'] if 'context' in location else ''), "\n"
 
     def test_abbreviations(self):
         text = "I was in NJ over the weekend."
@@ -117,6 +134,11 @@ class TestStringMethods(unittest.TestCase):
         text = "This is Costa Brava County."
         location = extract_location(text)
         self.assertEqual(location, "Costa Brava")
+
+    def test_ignore_these_names(self):
+        text = "I went to Brazil and then to the USA."
+        locations = extract_locations_with_context(text, ignore_these_names=["USA"])
+        self.assertEqual(len(locations), 1)
 
 if __name__ == '__main__':
     unittest.main()
