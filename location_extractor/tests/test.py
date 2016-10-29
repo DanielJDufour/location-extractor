@@ -42,10 +42,14 @@ class TestStringMethods(unittest.TestCase):
             text = f.read()
             start = datetime.now()
             with timeout(seconds=10):
-                locations = extract_locations_with_context(text, debug=False, max_seconds=1)
+                locations = extract_locations_with_context(text, debug=False, max_seconds=5)
             seconds_took = (datetime.now() - start).total_seconds()
             self.assertTrue(seconds_took < 10)
-            self.assertTrue(len(locations) > 10)
+            try:
+                self.assertTrue(len(locations) > 10)
+            except Exception as e:
+                print "len(locations) = ", len(locations)
+                raise e
 
 
 
