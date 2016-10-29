@@ -231,7 +231,7 @@ def extract_locations_from_text(text, return_demonyms=False, return_abbreviation
     else:
         locations = list(set(locations + [d['location'] for d in demonyms]))
 
-    print "extracting locations from text took", (datetime.now() - start).total_seconds(), "seconds"
+    #print "extracting locations from text took", (datetime.now() - start).total_seconds(), "seconds"
     #print "finishing extract_locations_from_text with", len(locations), "locations", locations[:5]
     return locations
 
@@ -357,7 +357,7 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
  
     locations = grouped_by_hash.values()
 
-    print "extracting locations with context from text took", (datetime.now() - start).total_seconds(), "seconds"
+    #print "extracting locations with context from text took", (datetime.now() - start).total_seconds(), "seconds"
     #print "finishing extract_locations_with_context_from_text with", list(locations)[:5]
     return locations
        
