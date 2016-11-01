@@ -162,6 +162,7 @@ def extract_locations_from_text(text, return_demonyms=False, return_abbreviation
 
             for m in finditer(ur"(?<=[ ])([A-Z]{2})(?=[ .,])", text, MULTILINE):
                 abbreviation = m.group(0)
+                #print "d keys:", d.keys()
                 if abbreviation in d['abbreviations']:
                     location = d['abbreviations'][abbreviation]
                     abbreviations.append({"abbreviation": abbreviation, "location": location})
@@ -294,7 +295,7 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
         if debug:
             start_time_for_mg = datetime.now()
             counter += 1
-            print "matchgroup:", counter
+            #print "matchgroup:", counter
         name = matchgroup.group(0)
         if name:
             middle = float(matchgroup.end() + matchgroup.start()) / 2
