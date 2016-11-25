@@ -67,6 +67,8 @@ class TestStringMethods(unittest.TestCase):
         location = extract_location(u"He is from \u0053\u00e3\u006f \u0054\u006f\u006d\u00e9")
         self.assertTrue(location  == u"\u0053\u00e3\u006f \u0054\u006f\u006d\u00e9")
 
+        self.assertTrue(extract_location("He is from Santo Domingo.") == "Santo Domingo")
+
     def test_abbreviations(self):
         text = "I was in NJ over the weekend."
         location = extract_location_with_context(text)
