@@ -133,10 +133,12 @@ def extract_locations_from_text(text, return_demonyms=False, return_abbreviation
 
             d = dictionary_of_keywords[language]
 
-            location_pattern = "((?:[A-Z][a-z]+|[A-Z]{2,})(?: de)?(?: [A-Z][a-z]+|[A-Z]{2,})?)"
+            # \u00e3 is the a with the curly on top like in Sao Tome
+            # \u00e9 is the e with accent on top
+            location_pattern = ur"((?:[A-Z][a-z\u00e3\u00e9]+|[A-Z]{2,})(?: de)?(?: [A-Z][a-z\u00e3\u00e9]+|[A-Z]{2,})?)"
 
             #keyword comes before location
-            locations.update(flatten(findall(ur"(?:(?:[^A-Za-z]|^)(?:"+ "|".join(d['before']) + ") )" + location_pattern, text, flags)))
+            locations.update(flatten(findall(ur"(?:(?:[^A-Za-z\u00e3\u00e9]|^)(?:"+ "|".join(d['before']) + ") )" + location_pattern, text, flags)))
             #print "\nbefore locations are", locations
 
             #keywords comes after location

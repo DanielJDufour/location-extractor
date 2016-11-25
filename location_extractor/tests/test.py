@@ -61,6 +61,12 @@ class TestStringMethods(unittest.TestCase):
             #for location in locations:
             #    print "\n", location['name'], " : ", (location['context'] if 'context' in location else ''), "\n"
 
+        location = extract_location("He is from Saudi Arabia.")
+        self.assertTrue(location == "Saudi Arabia")
+
+        location = extract_location(u"He is from \u0053\u00e3\u006f \u0054\u006f\u006d\u00e9")
+        self.assertTrue(location  == u"\u0053\u00e3\u006f \u0054\u006f\u006d\u00e9")
+
     def test_abbreviations(self):
         text = "I was in NJ over the weekend."
         location = extract_location_with_context(text)
