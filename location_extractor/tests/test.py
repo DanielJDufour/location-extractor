@@ -23,8 +23,13 @@ class TestStringMethods(unittest.TestCase):
 
     def test_height(self):
         text = "Bla bla bla       Madison Heights MI      Lorem Ipsum bla bla bla"
-        locations = extract_locations_with_context(text)
-        print "heights locations:", locations
+        locations = extract_locations_from_text(text, return_abbreviations=True)
+        try:
+            self.assertEqual(len(locations), 2)
+        except Exception as e:
+            print "locations:", locations
+            print e
+            raise e
 
     """
     def test_performance(self):
@@ -180,6 +185,19 @@ class TestStringMethods(unittest.TestCase):
         text = "I went to Brazil and then to the USA."
         locations = extract_locations_with_context(text, ignore_these_names=["USA"])
         self.assertEqual(len(locations), 1)
+
+    def test_state_abbreviations(self):
+        text = "I'm from Seattle, WA."
+        locations = extract_locations_from_text(text, return_abbreviations=True)
+        try:
+            self.assertEqual(len(locations), 2)
+            self.assertEqual(locations[0], "Seattle")
+            self.assertEqual(locations[1]['location'], "Washington")
+        except Exception as e:
+            print "locations:", locations
+            print e
+            raise e
+        
 
 if __name__ == '__main__':
     unittest.main()
