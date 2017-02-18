@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 import signal, unittest
 from datetime import datetime
+from inspect import getargspec
 from location_extractor import *
 from os.path import abspath, dirname
 
@@ -21,6 +22,7 @@ class timeout:
 class TestStringMethods(unittest.TestCase):
 
 
+    """
     def test_height(self):
         text = "Bla bla bla       Madison Heights MI      Lorem Ipsum bla bla bla"
         locations = extract_locations_from_text(text, return_abbreviations=True)
@@ -31,7 +33,6 @@ class TestStringMethods(unittest.TestCase):
             print e
             raise e
 
-    """
     def test_performance(self):
         with open(path_to_directory_of_this_file + "/performance.txt") as f:
             text = f.read()
@@ -71,7 +72,7 @@ class TestStringMethods(unittest.TestCase):
 
     def test_abbreviations(self):
         text = "I was in NJ over the weekend."
-        location = extract_location_with_context(text)
+        location = extract_location_with_context(text, return_abbreviations=True)
         self.assertEqual(location['name'], "New Jersey")
 
     def test_counting(self):
@@ -196,6 +197,32 @@ class TestStringMethods(unittest.TestCase):
         except Exception as e:
             print "locations:", locations
             print e
+            raise e
+
+    def test_state_abbreviations_with_context(self):
+        text = "I'm from Seattle, WA."
+        try:
+            locations = extract_locations_with_context(text, return_abbreviations=True)
+            self.assertEqual(len(locations), 2)
+            self.assertEqual(locations[0]['name'], "Seattle")
+            self.assertEqual(locations[1]['name'], "Washington")
+        except Exception as e:
+            print "extract_locations_with_context's args:", getargspec(extract_locations_with_context)
+            print "locations:", locations
+            print e
+            raise e
+
+    def test_abbreviations_with_context(self):
+        text = "He visited Arlington, TX"
+        try:
+            names = [u'Arlington']
+            locations = extract_locations_with_context(text, names, debug=True, return_abbreviations=True)
+            self.assertEqual(len(locations), 2)
+            self.assertEqual(locations[0]['name'], "Arlington")
+            self.assertEqual(locations[1]['name'], "Texas")
+        except Exception as e:
+            print e 
+            print "locations:", locations
             raise e
         
 
