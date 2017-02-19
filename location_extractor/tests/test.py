@@ -192,11 +192,11 @@ class TestStringMethods(unittest.TestCase):
         locations = extract_locations_from_text(text, return_abbreviations=True)
         try:
             self.assertEqual(len(locations), 2)
-            self.assertEqual(locations[0], "Seattle")
-            self.assertEqual(locations[1]['location'], "Washington")
+            seattle = [l for l in locations if l['location'] == "Seattle"][0]
+            self.assertEqual(seattle['admin1code'], "WA")
         except Exception as e:
-            print "locations:", locations
             print e
+            print "locations:", locations
             raise e
 
     def test_state_abbreviations_with_context(self):
