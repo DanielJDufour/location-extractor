@@ -169,12 +169,17 @@ def extract_locations_from_text(text, debug=False, return_demonyms=False, return
                 #print "d keys:", d.keys()
                 if abbreviation in d['abbreviations']:
                     location = d['abbreviations'][abbreviation]
-                    abbreviations.append({"abbreviation": abbreviation, "admin1code": abbreviation, "location": location})
+                    abbreviations.append({"abbreviation": abbreviation, "admin1code": abbreviation, "end": m.end(), "location": location, "start": m.start()})
 
             for m in finditer(location_pattern + ",? (?P<state>[A-Z]{2})(?=[ .,]|$)", text, MULTILINE):
                 name_of_place = m.group(1)
                 state = m.group("state")
                 city_state.append({"location": name_of_place, "admin1code": state})
+
+                # filter out abbreviation if capture separately because people probably don't want California if have Los Angeles, CA
+                start_of_abbreviation = m.start("state")
+                end_of_abbreviation = m.end("state")
+                abbreviations = [a for a in abbreviations if a["start"] != start_of_abbreviation or a["end"] != end_of_abbreviation]
 
 
         elif language == "Arabic":

@@ -191,7 +191,7 @@ class TestStringMethods(unittest.TestCase):
         text = "I'm from Seattle, WA."
         locations = extract_locations_from_text(text, return_abbreviations=True)
         try:
-            self.assertEqual(len(locations), 2)
+            self.assertEqual(len(locations), 1)
             seattle = [l for l in locations if l['location'] == "Seattle"][0]
             self.assertEqual(seattle['admin1code'], "WA")
         except Exception as e:
@@ -203,9 +203,8 @@ class TestStringMethods(unittest.TestCase):
         text = "I'm from Seattle, WA."
         try:
             locations = extract_locations_with_context(text, return_abbreviations=True)
-            self.assertEqual(len(locations), 2)
+            self.assertEqual(len(locations), 1)
             self.assertEqual(locations[0]['name'], "Seattle")
-            self.assertEqual(locations[1]['name'], "Washington")
         except Exception as e:
             print "extract_locations_with_context's args:", getargspec(extract_locations_with_context)
             print "locations:", locations
@@ -217,9 +216,8 @@ class TestStringMethods(unittest.TestCase):
         try:
             names = [u'Arlington']
             locations = extract_locations_with_context(text, names, debug=True, return_abbreviations=True)
-            self.assertEqual(len(locations), 2)
+            self.assertEqual(len(locations), 1)
             self.assertEqual(locations[0]['name'], "Arlington")
-            self.assertEqual(locations[1]['name'], "Texas")
         except Exception as e:
             print e 
             print "locations:", locations
