@@ -4,6 +4,7 @@ from datetime import datetime
 from inspect import getargspec
 from location_extractor import *
 from os.path import abspath, dirname
+from requests import get
 
 path_to_directory_of_this_file = dirname(realpath(__file__))
 
@@ -222,6 +223,11 @@ class TestStringMethods(unittest.TestCase):
             print e 
             print "locations:", locations
             raise e
+
+    def test_tables(self):
+        text = get("http://www.nuforc.org/webreports/ndxlAK.html").text
+        locations = extract_locations_with_context_from_html_tables(text)
+        print "locations:", locations
         
 
 if __name__ == '__main__':

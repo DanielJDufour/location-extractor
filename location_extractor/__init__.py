@@ -1,3 +1,4 @@
+from broth import Broth
 from datetime import datetime
 from os.path import dirname, realpath
 from os import listdir
@@ -259,6 +260,49 @@ def extract_locations_from_text(text, debug=False, return_demonyms=False, return
 def extract_location(inpt):
     # returns a random location ... in the future make this so return the first location matched.. but implement as separate method entirely
     return extract_locations(inpt)[0]
+
+
+def extract_locations_with_context_from_html_tables(text, debug=False):
+    locations = []
+    broth = Broth(text)
+    for table in broth.tables:
+        rows = table.select("tr")
+        if len(rows) > 10:
+            if debug: print "more than 10 rows in table!"
+            header = [th.text for th in table.select("thead tr th")]
+
+            #get location column
+            date_column_index = None
+            location_column_index = None
+            admin1_column_index = None
+            for column_index, head in enumerate(header):
+                head = head.strip().lower()
+                if debug: print "head:", [head]
+                if head == "city":
+                    location_column_index = column_index
+                elif head == "state":
+                    admin1_column_index = column_index
+                elif "date" in head or "time" in head:
+                    date_column_index = column_index
+            if debug:
+                print "location_column_index:", location_column_index
+                print "admin1_column_index:", admin1_column_index
+                print "date_column_index:", date_column_index
+
+            if location_column_index:
+                for row in table.select("tbody tr"):
+                    tds = [td.text for td in row.select("td")] 
+                    d = {'count': 1}
+                    d['name'] = name = tds[location_column_index].strip()
+                    if admin1_column_index is not None:
+                        d['admin1code'] = tds[admin1_column_index].strip()
+                    if date_column_index is not None:
+                        d['date'] = extract_date(tds[date_column_index].strip())
+
+                    locations.append(d)
+
+    if debug: print "locations from html table:", locations
+    return locations
 
 
 def extract_locations_with_context_from_text(text, suggestions=None, ignore_these_names=None, debug=False, max_seconds=None, return_abbreviations=False):
