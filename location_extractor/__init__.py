@@ -103,6 +103,7 @@ def extract_locations_from_text(text, debug=False, return_demonyms=False, return
     global dictionary_of_keywords
     start = datetime.now()
     if debug: print "starting extract_locations_from_text"
+    if debug: print "text:", [text]
     if isinstance(text, str):
         text = text.decode("utf-8")
 
@@ -158,8 +159,13 @@ def extract_locations_from_text(text, debug=False, return_demonyms=False, return
 
             #ignore demonyms for now, because accuracy is not that high
             #Eritreans, Syrian
-            for m in finditer(ur"([A-Z][a-z]{3,}(ish|ans|an))", text, MULTILINE):
+            endings = list(set([demonym[-2:] for demonym in d['demonyms'].keys()]))
+            if debug: print "endings:", endings
+            pattern = ur"([A-Z][a-z]{2,}(" + "|".join(endings) + "))"
+            if debug: print "pattern:", [pattern]
+            for m in finditer(pattern, text, MULTILINE):
                 demonym = m.group(0)
+                if debug: print "demonym jyeah:", demonym
                 if demonym in d['demonyms']:
                     location = d['demonyms'][demonym]
                     demonyms.append({"demonym": demonym, "location": location})
@@ -489,12 +495,12 @@ def extract_location_with_context(inpt, return_abbreviations=False):
     if results:
         return results[0]
 
-def extract_locations(inpt):
+def extract_locations(inpt, return_demonyms=False):
     if isinstance(inpt, str) or isinstance(inpt, unicode):
         if inpt.endswith(".pdf"):
             return extract_locations_from_path_to_pdf(inpt)
         else:
-            return extract_locations_from_text(inpt)
+            return extract_locations_from_text(inpt, return_demonyms=return_demonyms)
     elif isinstance(inpt, file):
         if f.name.endswith(".pdf"):
             return extract_locations_from_pdf(inpt)

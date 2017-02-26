@@ -227,7 +227,15 @@ class TestStringMethods(unittest.TestCase):
     def test_tables(self):
         text = get("http://www.nuforc.org/webreports/ndxlAK.html").text
         locations = extract_locations_with_context_from_html_tables(text)
-        print "locations:", locations
+        self.assertTrue(len(locations) > 20)
+
+    def testSaudi(self):
+        text = "Saudi foreign minister makes landmark visit to Iraq"
+        locations = extract_locations_from_text(text, debug=True)
+        print "sauid locs:", locations
+        self.assertEqual(len(locations), 2)
+        self.assertTrue("Iraq" in locations)
+        self.assertTrue("Saudi Arabia" in locations)
         
 
 if __name__ == '__main__':
