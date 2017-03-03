@@ -1,5 +1,6 @@
 from broth import Broth
 from datetime import datetime
+from docx import Document
 from os.path import dirname, realpath
 from os import listdir
 from re import findall, finditer, IGNORECASE, MULTILINE, search, sub, UNICODE
@@ -268,27 +269,29 @@ def extract_location(inpt):
     return extract_locations(inpt)[0]
 
 
-def extract_locations_with_context_from_html_tables(text, debug=False):
+def extract_locations_with_context_from_tables(tables, debug=False):
     locations = []
-    broth = Broth(text)
-    for table in broth.tables:
-        rows = table.select("tr")
-        if len(rows) > 10:
+    for table in tables:
+
+        # a table is just a list of rows
+        if len(table) > 3:
             if debug: print "more than 10 rows in table!"
-            header = [th.text for th in table.select("thead tr th")]
+
+            # just assume that the header is the first row
+            header = table[0]
 
             #get location column
             date_column_index = None
             location_column_index = None
             admin1_column_index = None
-            for column_index, head in enumerate(header):
-                head = head.strip().lower()
-                if debug: print "head:", [head]
-                if head == "city":
+            for column_index, cell in enumerate(header):
+                cell = cell.strip().lower()
+                if debug: print "cell:", [cell]
+                if cell == "city":
                     location_column_index = column_index
-                elif head == "state":
+                elif cell == "state":
                     admin1_column_index = column_index
-                elif "date" in head or "time" in head:
+                elif "date" in cell or "time" in cell:
                     date_column_index = column_index
             if debug:
                 print "location_column_index:", location_column_index
@@ -296,17 +299,38 @@ def extract_locations_with_context_from_html_tables(text, debug=False):
                 print "date_column_index:", date_column_index
 
             if location_column_index:
-                for row in table.select("tbody tr"):
-                    tds = [td.text for td in row.select("td")] 
+                if debug: print "table:", table
+                for row in table:
+                    if debug: print "row:", row
                     d = {'count': 1}
-                    d['name'] = name = tds[location_column_index].strip()
+                    # row is just an array of cells
+                    d['name'] = name = row[location_column_index].strip()
                     if admin1_column_index is not None:
-                        d['admin1code'] = tds[admin1_column_index].strip()
+                        d['admin1code'] = row[admin1_column_index].strip()
                     if date_column_index is not None:
-                        d['date'] = extract_date(tds[date_column_index].strip())
+                        d['date'] = extract_date(row[date_column_index].strip())
 
                     locations.append(d)
 
+    if debug: print "locations from html table:", locations
+    return locations
+
+
+def extract_locations_with_context_from_html_tables(text, debug=False):
+    tables = []
+    for table in Broth(text).tables:
+        rows = []
+        ths = table.select("thead tr th")
+        if ths:
+            rows.append([th.text.strip() for th in ths])
+        for row in table.select("tr"):
+            tds = row.select("td")
+            if tds:
+                rows.append([td.text.strip() for td in tds])
+        tables.append(rows)
+          
+    locations = extract_locations_with_context_from_tables(tables, debug=debug)
+ 
     if debug: print "locations from html table:", locations
     return locations
 
@@ -481,6 +505,17 @@ def get_text_from_pdf_file(pdf_file):
     lines = [line for line in lines if len(line) > 4]
     text = "\n".join(lines)
     return text
+
+def get_text_and_tables_from_docx_file(docx_file):
+    print "starting get_text_and_tables_from_docx_file"
+    document = Document(docx_file)
+    print "document:", document
+    text = "\r\n\r\n".join([paragraph.text for paragraph in document.paragraphs])
+    print "text:", [text]
+    tables = [[[ cell.text for cell in column.cells] for column in table.columns] for table in document.tables]
+    print "tables:", tables
+    return {"text": text, "tables": tables}
+    
  
 def extract_locations_from_pdf(pdf_file):
     #print "starting extract_locations_from_pdf"
@@ -489,6 +524,16 @@ def extract_locations_from_pdf(pdf_file):
 def extract_locations_with_context_from_pdf(pdf_file):
     #print "starting extract_locations_with_context_from_pdf with", pdf_file
     return extract_locations_with_context_from_text(get_text_from_pdf_file(pdf_file))
+
+# will need to make this more sophisticated at a future date
+# so that it can pull out tables
+def extract_locations_with_context_from_docx(docx_file):
+    print "starting extract_locations_with_context_from_docx with", docx_file
+    d = get_text_and_tables_from_docx_file(docx_file)
+    locations = []
+    locations.extend(extract_locations_with_context_from_text(d['text']))
+    locations.extend(extract_locations_with_context_from_tables(d['tables']))
+    return locations
 
 def extract_location_with_context(inpt, return_abbreviations=False):
     results = extract_locations_with_context(inpt, return_abbreviations=return_abbreviations)
@@ -507,14 +552,17 @@ def extract_locations(inpt, return_demonyms=False):
 
 def extract_locations_with_context(inpt, suggestions=None, ignore_these_names=[], debug=False, max_seconds=None, return_abbreviations=False):
     #print "starting extract_locations_with_context with", type(inpt)
+    print " [el] type:", str(type(inpt)).lower()
     if isinstance(inpt, str) or isinstance(inpt, unicode):
         if inpt.endswith(".pdf"):
             return extract_locations_with_context_from_pdf(inpt)
         else:
             return extract_locations_with_context_from_text(inpt, suggestions=suggestions, ignore_these_names=ignore_these_names, debug=debug, max_seconds=max_seconds, return_abbreviations=return_abbreviations)
     elif "file" in str(type(inpt)).lower():
-        #print "isinstance file"
-        if inpt.name.endswith(".pdf"):
+        print "isinstance file with name", inpt.name
+        if inpt.name.endswith(".docx"):
+            return extract_locations_with_context_from_docx(inpt)
+        elif inpt.name.endswith(".pdf"):
             return extract_locations_with_context_from_pdf(inpt)
 
 el = extract_locations

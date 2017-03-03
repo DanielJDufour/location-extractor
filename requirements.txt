@@ -1,4 +1,5 @@
 broth
 date-extractor
 language-detector
+python-docx
 pytz

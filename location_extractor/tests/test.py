@@ -20,7 +20,7 @@ class timeout:
     def __exit__(self, type, value, traceback):
         signal.alarm(0)
 
-class TestStringMethods(unittest.TestCase):
+class TestMethods(unittest.TestCase):
 
 
     """
@@ -226,17 +226,53 @@ class TestStringMethods(unittest.TestCase):
 
     def test_tables(self):
         text = get("http://www.nuforc.org/webreports/ndxlAK.html").text
-        locations = extract_locations_with_context_from_html_tables(text)
+        locations = extract_locations_with_context_from_html_tables(text, debug=True)
         self.assertTrue(len(locations) > 20)
 
     def testSaudi(self):
         text = "Saudi foreign minister makes landmark visit to Iraq"
-        locations = extract_locations_from_text(text, debug=True)
+        locations = extract_locations_from_text(text)
         print "sauid locs:", locations
         self.assertEqual(len(locations), 2)
         self.assertTrue("Iraq" in locations)
         self.assertTrue("Saudi Arabia" in locations)
-        
+
+    def testNewDehli(self):
+        text = "Fire breaks out at Times of India building in New Delhi"
+        locations = extract_locations(text)
+        self.assertTrue("New Delhi" in locations)
+
+    """
+    def testSharm(self):
+        text = "The UK was amongst several European countries to halt flights to Sharm al-Sheikh in November 2015, after a Russian passenger plane crashed in Egyptâs Sinai Peninsula shortly after taking off from the popular Red Sea resort, killing everyone on board."
+        locations = extract_locations(text)
+        print "sharm locs:", locations
+        self.assertTrue("Egypt" in locations)
+        self.assertTrue("Europe" in locations)
+        self.assertTrue("Red Sea" in locations)
+        self.assertTrue("Russia" in locations)
+        self.assertTrue("Sharm al-Sheikh" in locations)
+        self.assertTrue("Sinai Peninsula" in locations)
+        self.assertTrue("United Kingdom" in locations)
+    """
+
+    def testWeather(self):
+        text = """* Locations impacted includeâ¦ Arlington, Alexandria, Waldorf, Dale City, Clinton, Springfield, Fort Washington, Fort Hunt, Groveton, Forestville, Huntington, Coral Hills, Fort Belvoir, Woodbridge, National Harbor, Quantico, Nationals Park, Reagan National Airport, Crystal City and RFK Stadium."""
+        locations = extract_locations(text)
+
+    def testHyphenated(self):
+        text = "January 2016 - Live grenade thrown at hostel housing 170 people in the south-western town in Villingen-Schwenningen but fails to detonate"
+      
+    """  
+    def testE(self):
+        text = "Where is Sar-e Pul Province?"
+        locations = extract_locations(text)
+        try:
+            self.assertTrue("Sar-e Pul" in locations)
+        except Exception as e:
+            print "locations:", locations
+            raise e
+    """
 
 if __name__ == '__main__':
     unittest.main()
