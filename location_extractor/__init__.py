@@ -255,7 +255,9 @@ def extract_locations_from_text(text, debug=False, return_demonyms=False, return
             # swap out locations for full dict if have info
             # for example remove "Portland" if have {"location": "Portland", "admin1code": "OR"}
             for d in city_state:
-                locations.remove(d['location'])
+                d_location = d['location']
+                if d_location in locations:
+                    locations.remove(d_location)
                 locations.append(d)
     else:
         locations = list(set(locations + [d['location'] for d in demonyms]))

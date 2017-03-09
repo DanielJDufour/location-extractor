@@ -226,7 +226,7 @@ class TestMethods(unittest.TestCase):
 
     def test_tables(self):
         text = get("http://www.nuforc.org/webreports/ndxlAK.html").text
-        locations = extract_locations_with_context_from_html_tables(text, debug=True)
+        locations = extract_locations_with_context_from_html_tables(text, debug=False)
         self.assertTrue(len(locations) > 20)
 
     def testSaudi(self):
@@ -273,6 +273,12 @@ class TestMethods(unittest.TestCase):
             print "locations:", locations
             raise e
     """
+
+    def testBugFix(self):
+        locations = extract_locations_with_context("Alexandria, VA", debug=True, return_abbreviations=True)
+        self.assertEqual(len(locations), 1)
+        self.assertEqual(locations[0]['name'], "Alexandria")
+        self.assertEqual(locations[0]['admin1code'], "VA")
 
 if __name__ == '__main__':
     unittest.main()
