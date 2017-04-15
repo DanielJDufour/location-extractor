@@ -112,6 +112,7 @@ Es
 Every
 Even
 First
+From
 Generals
 Gas
 German
@@ -175,6 +176,7 @@ Telephone
 The
 The Times
 Then
+They
 That
 This
 Time
