@@ -3,8 +3,9 @@ import signal, unittest
 from datetime import datetime
 from inspect import getargspec
 from location_extractor import *
-from os.path import abspath, dirname
+from os.path import abspath, dirname, join
 from requests import get
+from unittest import TestCase
 
 path_to_directory_of_this_file = dirname(realpath(__file__))
 
@@ -19,6 +20,17 @@ class timeout:
         signal.alarm(self.seconds)
     def __exit__(self, type, value, traceback):
         signal.alarm(0)
+
+class TestPDF(TestCase):
+
+    def test_local_african_pdf(self):
+        path_to_file = join(path_to_directory_of_this_file, "sources/ASO_Press-Release_March2017.pdf")
+        print "path_to_file:", path_to_file
+        #with open(path_to_file) as f:
+        #    locations = extract_locations_with_context(f.read(), debug=True)
+        locations = extract_locations_with_context(path_to_file, debug=True)
+        print "locations:", locations
+        self.assertTrue(len(locations) > 5)
 
 class TestMethods(unittest.TestCase):
 
@@ -187,6 +199,19 @@ class TestMethods(unittest.TestCase):
         text = "I went to Brazil and then to the USA."
         locations = extract_locations_with_context(text, ignore_these_names=["USA"])
         self.assertEqual(len(locations), 1)
+
+    def test_city_in_country(self):
+        text = "Brussels, Belgium is very cool"
+        locations = extract_locations_with_context_from_text(text, debug=True)
+        try:
+            self.assertEqual(len(locations), 1)
+            location = [l for l in locations if l['name'] == "Brussels"][0]
+            self.assertEqual(location['country'], "Belgium")
+        except Exception as e:
+            print e
+            print "locations:", locations
+            raise e
+
 
     def test_state_abbreviations(self):
         text = "I'm from Seattle, WA."
