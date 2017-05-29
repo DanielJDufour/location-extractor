@@ -207,6 +207,7 @@ class TestMethods(unittest.TestCase):
             self.assertEqual(len(locations), 1)
             location = [l for l in locations if l['name'] == "Brussels"][0]
             self.assertEqual(location['country'], "Belgium")
+            self.assertEqual(location['country_code'], "BE")
         except Exception as e:
             print e
             print "locations:", locations

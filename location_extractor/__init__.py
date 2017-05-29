@@ -80,7 +80,13 @@ def load_language_into_dictionary_of_keywords(language):
                         if line:
                             abbreviation, place = line.split("\t")
                             dictionary_of_keywords[language]['abbreviations'][abbreviation] = place
- 
+            elif filename == "countries.txt":
+                dictionary_of_keywords[language]['countries'] = {}
+                with open(directory_of_language_files + "/" + filename) as f:
+                    for line in f.read().decode("utf-8").strip().split("\n"):
+                        if line:
+                            country, country_code = line.split("\t")
+                            dictionary_of_keywords[language]['countries'][country] = country_code
             else:
                 with open(directory_of_language_files + "/" + filename) as f:
                     keywords = [keyword for keyword in f.read().decode("utf-8").strip().split("\n") if keyword]
@@ -123,7 +129,7 @@ def extract_locations_from_text(text, debug=False, return_demonyms=False, return
     if not languages: 
         languages = listdir(directory_of_keywords)
 
-    #print "languages = ", languages
+    if debug: print "languages = ", languages
 
     locations = set()
     demonyms = []
@@ -134,12 +140,17 @@ def extract_locations_from_text(text, debug=False, return_demonyms=False, return
 
     for language in languages:
 
+        if debug: print "for language", language
+
         if language not in dictionary_of_keywords:
             load_language_into_dictionary_of_keywords(language)
 
         if language == "English":
 
             d = dictionary_of_keywords[language]
+
+            if debug: print "countries for english:", d['countries']
+
 
             # \u00e3 is the a with the curly on top like in Sao Tome
             # \u00e9 is the e with accent on top
@@ -195,10 +206,10 @@ def extract_locations_from_text(text, debug=False, return_demonyms=False, return
 
 
             # countries
-            for m in finditer("(" + "|".join(d['countries']) + ")", text, MULTILINE):
+            for m in finditer("(" + "|".join(d['countries'].keys()) + ")", text, MULTILINE):
                 country = m.group(0)
                 if country in d['countries']:
-                    countries.append({"country": country, "end": m.end(), "start": m.start()})
+                    countries.append({"country": country, "end": m.end(), "start": m.start(), "country_code": d['countries'][country]})
 
             if debug: print "countries found are:", countries
 
@@ -206,7 +217,7 @@ def extract_locations_from_text(text, debug=False, return_demonyms=False, return
                 if debug: print "found place in country"
                 name_of_place = m.group(1)
                 country = m.group("country")
-                city_country.append({"location": name_of_place, "country": country})
+                city_country.append({"location": name_of_place, "country": country, "country_code": d['countries'][country]})
 
                 # filter out country if capture separately because people probably don't want England if have London, England
                 start_of_country = m.start("country")
@@ -395,6 +406,7 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
     abbreviation_to_location = {}
     name_to_admin1code = {}
     name_to_country = {}
+    name_to_country_code = {}
     names = []
     for name in extracted_names:
         if isinstance(name, dict):
@@ -409,6 +421,7 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
                 names.append(name['location'])
             if "country" in name:
                 name_to_country[name['location']] = name['country']
+                name_to_country_code[name['location']] = name['country_code']
                 names.append(name['location'])
         else:
             names.append(name)
@@ -461,6 +474,7 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
                 dictionary_of_location['admin1code'] = name_to_admin1code[name]
             elif name in name_to_country:
                 dictionary_of_location['country'] = name_to_country[name]
+                dictionary_of_location['country_code'] = name_to_country_code[name]
 
             dictionary_of_location['name'] = name
 
@@ -523,6 +537,7 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
                     grouped_by_hash[h]['context'] = "\n ... \n" + location['context']
             if "country" in location and location['country']:
                 grouped_by_hash[h]['country'] = location['country']
+                grouped_by_hash[h]['country_code'] = location['country_code']
         else:
             d = {'count': 1, 'date': location['date'], 'name': location['name']}
             if "context" in location and location['context']:
@@ -531,6 +546,7 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
                 d['admin1code'] = location['admin1code']
             if "country" in location and location['country']:
                 d['country'] = location['country']
+                d['country_code'] = location['country_code']
             grouped_by_hash[h] = d
  
     locations = grouped_by_hash.values()
