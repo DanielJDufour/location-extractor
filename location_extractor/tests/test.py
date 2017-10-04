@@ -21,6 +21,32 @@ class timeout:
     def __exit__(self, type, value, traceback):
         signal.alarm(0)
 
+
+class FOSS4G2017(TestCase):
+    def test_cambridge(self):
+        source = "Cambridge, MA"
+        suggestions = [u'Cambridge', u'Cambridge,', u'MA']
+        locations = extract_locations_with_context_from_text(source, suggestions=suggestions, debug=True)
+        print "locations:", locations
+        self.assertEqual(next(location for location in locations if location['name'] == "Cambridge" and location['admin1code'] == "MA"), 1)
+
+class TestArabic(TestCase):
+    def test_demonyms(self):
+        source = u"\u0631\u0641\u0639\u062a \u0627\u0644\u0644\u062c\u0646\u0629 \u0627\u0644\u0648\u0637\u0646\u064a\u0629 \u0644\u062d\u0642\u0648\u0642 \u0627\u0644\u0625\u0646\u0633\u0627\u0646 \u0627\u0644\u0642\u0637\u0631\u064a\u0629 \u0634\u0643\u0648\u0649 \u0625\u0644\u0649 \u0627\u0644\u0645\u0642\u0631\u0631 \u0627\u0644\u0623\u0645\u0645\u064a \u0627\u0644\u062e\u0627\u0635 \u0627\u0644\u0645\u0639\u0646\u064a \u0628\u062d\u0631\u064a\u0629 \u0627\u0644\u062f\u064a\u0646 \u0648\u0627\u0644\u0639\u0642\u064a\u062f\u0629 \u0628\u0634\u0623\u0646 \u0627\u0644\u062a\u0636\u064a\u064a\u0642\u0627\u062a \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629 \u0639\u0644\u0649 \u062d\u062c\u0627\u062c\u0647\u0627 \u0648\u0645\u0639\u062a\u0645\u0631\u064a\u0647\u0627\u060c \u0641\u064a\u0645\u0627 \u062a\u0639\u0645\u0644 \u0639\u0644\u0649 \u0627\u062a\u062e\u0627\u0630 \u062e\u0637\u0648\u0627\u062a \u0623\u062e\u0631\u0649 \u0644\u062f\u0649 \u0627\u0644\u0623\u0645\u0645 \u0627\u0644\u0645\u062a\u062d\u062f\u0629\u002e"
+        locations = extract_locations(source)
+        self.assertTrue(u"\u0642\u0637\u0631" in locations)
+
+        # Qatari
+        source = u"\u0627\u0644\u0642\u0637\u0631\u064a\u0629"
+        locations = extract_locations_with_context(source)
+        self.assertEqual(locations[0]['name'], u"\u0642\u0637\u0631")
+
+        locations = extract_locations_with_context(source, suggestions=[source], debug=True)
+        self.assertEqual(locations[0]['name'], u"\u0642\u0637\u0631")
+
+       
+       
+
 class TestPDF(TestCase):
 
     def test_local_african_pdf(self):
@@ -213,6 +239,13 @@ class TestMethods(unittest.TestCase):
             print "locations:", locations
             raise e
 
+    def test_place_comma_state(self):
+        text = "I'm from Paris, Texas"
+        locations = extract_locations_with_context_from_text(text)
+        self.assertEqual(len(locations), 1)
+        location = locations[0]
+        print "location:", location
+        self.assertEqual(location['admin1code'], "TX")
 
     def test_state_abbreviations(self):
         text = "I'm from Seattle, WA."

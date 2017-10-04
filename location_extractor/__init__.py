@@ -106,7 +106,7 @@ def load_language_into_dictionary_of_letters(language):
     dictionary_of_letters[language] = list(letters)
 
 
-def extract_locations_from_text(text, debug=False, return_demonyms=False, return_abbreviations=False, return_country_info=False):
+def extract_locations_from_text(text, debug=False, return_demonyms=False, return_abbreviations=False, return_country_info=False, case_insensitive=None):
     global dictionary_of_keywords
     start = datetime.now()
     if debug: print "starting extract_locations_from_text"
@@ -115,6 +115,12 @@ def extract_locations_from_text(text, debug=False, return_demonyms=False, return
     if debug: print "return_abbreviations:", [return_abbreviations]
     if isinstance(text, str):
         text = text.decode("utf-8")
+
+    if case_insensitive is True:
+        flags = MULTILINE|UNICODE|IGNORECASE
+    else:
+        flags = MULTILINE|UNICODE
+
 
     # see if we can figure out what language the text is
     # if we can't figure it out, just try to extract locations using all the languages we got
@@ -149,7 +155,7 @@ def extract_locations_from_text(text, debug=False, return_demonyms=False, return
 
             d = dictionary_of_keywords[language]
 
-            if debug: print "countries for english:", d['countries']
+            #if debug: print "countries for english:", d['countries']
 
 
             # \u00e3 is the a with the curly on top like in Sao Tome
@@ -385,8 +391,15 @@ def extract_locations_with_context_from_html_tables(text, debug=False):
     return locations
 
 
-def extract_locations_with_context_from_text(text, suggestions=None, ignore_these_names=None, debug=False, max_seconds=None, return_abbreviations=False):
-    if debug: print "starting extract_locations_with_context_from_text with", type(text)
+def extract_locations_with_context_from_text(text, suggestions=None, ignore_these_names=None, debug=False, max_seconds=None, return_abbreviations=False, case_insensitive=None):
+    if debug:
+        import inspect
+        frame = inspect.currentframe()
+        args, _, _, values = inspect.getargvalues(frame)
+        print "[location_extractor] starting extract_locations_with_context_from_text with:"
+        for i in args:
+            print "    %s: %s" % (i, [values[i]])
+
     start = datetime.now()
 
     if not extract_date:
@@ -396,7 +409,7 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
     locations = []
 
     # got locations as list of words
-    extracted_names = extract_locations_from_text(text, debug=debug, return_demonyms=True, return_abbreviations=return_abbreviations, return_country_info=True)
+    extracted_names = extract_locations_from_text(text, debug=debug, return_demonyms=True, return_abbreviations=return_abbreviations, return_country_info=True, case_insensitive=case_insensitive)
     if debug: print "extracted_names:", extracted_names
     if ignore_these_names:
         extracted_names = [name for name in extracted_names if name not in ignore_these_names]
@@ -439,6 +452,7 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
     sentences = [{'text': m.group(0), 'start': m.start(), 'end': m.end() } for m in finditer("[^\.\n]+", text)]
     paragraphs = [{'text': m.group(0), 'start': m.start(), 'end': m.end() } for m in finditer("[^\n]+", text)]
     demonym_to_location_keys = demonym_to_location.keys()
+    if debug: print "[location_extractor] demonym_to_location_keys:", demonym_to_location_keys
     abbreviation_to_location_keys = abbreviation_to_location.keys()
     for matchgroup in finditer(pattern, text, flags):
 
@@ -448,8 +462,9 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
         if debug:
             start_time_for_mg = datetime.now()
             counter += 1
-            #print "matchgroup:", counter
+            if debug: print "matchgroup:", matchgroup
         name = matchgroup.group(0)
+        if debug: print "name:", [name]
         if name:
             middle = float(matchgroup.end() + matchgroup.start()) / 2
             for s in sentences:
@@ -464,8 +479,13 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
 
             dictionary_of_location = {}
 
-            if name in demonym_to_location_keys:
-                name = demonym_to_location[name]
+            if any([d in name for d in demonym_to_location_keys]):
+                if debug: print "found in demonym_to_location_keys", [demonym_to_location_keys]
+                for demonym in demonym_to_location_keys:
+                    if debug: "\tdemonym:", [demonym]
+                    if demonym in name:
+                        if debug: print "\t[location-extractor] changing", name, "to", demonym_to_location[demonym]
+                        name = demonym_to_location[demonym]
             elif name in abbreviation_to_location_keys:
                 dictionary_of_location['admin1code'] = name
                 print "added admin1code to ", dictionary_of_location
@@ -486,11 +506,12 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
             dictionary_of_location['hash'] = str(date) + "-" + name
 
             locations.append(dictionary_of_location)
-            if debug: print locations
+            #if debug: print locations
         if debug:
             times_taken.append((datetime.now() - start_time_for_mg).total_seconds())
             print "average_time_taken:", sum(times_taken) / len(times_taken), "seconds"
 
+    if debug: print "[location-extractor] locations before looking in columns:", locations
 
     if max_seconds is None or (datetime.now() - start).total_seconds() < max_seconds:
         if debug: print "[location-extractor] get locations by looking for columns with location keywords in them"
@@ -514,6 +535,9 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
                         date = extract_date(text_of_list)
                         locations.append({"name": name, "date": date, "hash": str(date) + "-" + name, "context": name})
     names = [location['name'] for location in locations]
+
+
+    if debug: print "[location-extractor] locations before removing duplicates:", locations
 
     #see: http://stackoverflow.com/questions/21720199/python-remove-any-element-from-a-list-of-strings-that-is-a-substring-of-anothe
     names_verbose = filter(lambda x: [x for i in names if x in i and x != i] == [], names)
@@ -602,29 +626,29 @@ def extract_locations_with_context_from_docx(docx_file):
     locations.extend(extract_locations_with_context_from_tables(d['tables']))
     return locations
 
-def extract_location_with_context(inpt, return_abbreviations=False):
-    results = extract_locations_with_context(inpt, return_abbreviations=return_abbreviations)
+def extract_location_with_context(inpt, return_abbreviations=False, debug=False, case_insensitive=None):
+    results = extract_locations_with_context(inpt, return_abbreviations=return_abbreviations, debug=debug, case_insensitive=case_insensitive)
     if results:
         return results[0]
 
-def extract_locations(inpt, return_demonyms=False):
+def extract_locations(inpt, return_demonyms=False, debug=False):
     if isinstance(inpt, str) or isinstance(inpt, unicode):
         if inpt.endswith(".pdf"):
-            return extract_locations_from_path_to_pdf(inpt)
+            return extract_locations_from_path_to_pdf(inpt, debug=debug)
         else:
-            return extract_locations_from_text(inpt, return_demonyms=return_demonyms)
+            return extract_locations_from_text(inpt, return_demonyms=return_demonyms, debug=debug)
     elif isinstance(inpt, file):
         if f.name.endswith(".pdf"):
-            return extract_locations_from_pdf(inpt)
+            return extract_locations_from_pdf(inpt, debug=debug)
 
-def extract_locations_with_context(inpt, suggestions=None, ignore_these_names=[], debug=False, max_seconds=None, return_abbreviations=False):
+def extract_locations_with_context(inpt, suggestions=None, ignore_these_names=[], debug=False, max_seconds=None, return_abbreviations=False, case_insensitive=None):
     if debug: print "starting extract_locations_with_context with", type(inpt)
     print " [el] type:", str(type(inpt)).lower()
     if isinstance(inpt, str) or isinstance(inpt, unicode):
         if inpt.endswith(".pdf") or inpt.startswith("%PDF"):
             return extract_locations_with_context_from_pdf(inpt, debug=debug)
         else:
-            return extract_locations_with_context_from_text(inpt, suggestions=suggestions, ignore_these_names=ignore_these_names, debug=debug, max_seconds=max_seconds, return_abbreviations=return_abbreviations)
+            return extract_locations_with_context_from_text(inpt, suggestions=suggestions, ignore_these_names=ignore_these_names, debug=debug, max_seconds=max_seconds, return_abbreviations=return_abbreviations, case_insensitive=case_insensitive)
     elif "file" in str(type(inpt)).lower():
         print "isinstance file with name", inpt.name
         if inpt.name.endswith(".docx"):
