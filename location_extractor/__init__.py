@@ -372,26 +372,34 @@ def extract_locations_with_context_from_tables(tables, debug=False):
     return locations
 
 
-def extract_locations_with_context_from_html_tables(text, debug=False):
-    tables = []
-    for table in Broth(text).tables:
-        rows = []
-        ths = table.select("thead tr th")
-        if ths:
-            rows.append([th.text.strip() for th in ths])
-        for row in table.select("tr"):
-            tds = row.select("td")
-            if tds:
-                rows.append([td.text.strip() for td in tds])
-        tables.append(rows)
-          
-    locations = extract_locations_with_context_from_tables(tables, debug=debug)
+def extract_locations_with_context_from_html_tables(text, debug=True):
+    try:
+        tables = []
+        broth = Broth(text)
+        if debug: print "broth:", broth
+        for table in broth.tables:
+            rows = []
+            ths = table.select("thead tr th")
+            if ths:
+                rows.append([th.text.strip() for th in ths])
+            for row in table.select("tr"):
+                tds = row.select("td")
+                if tds:
+                    rows.append([td.text.strip() for td in tds])
+            tables.append(rows)
+        
+        if debug: print "tables:", tables
+        locations = extract_locations_with_context_from_tables(tables, debug=debug)
  
-    if debug: print "locations from html table:", locations
-    return locations
+        if debug: print "locations from html table:", locations
+        return locations
+    except Exception as e:
+        print "[extract_locations_with_context_from_html_tables]:", e
+        raise e
 
 
 def extract_locations_with_context_from_text(text, suggestions=None, ignore_these_names=None, debug=False, max_seconds=None, return_abbreviations=False, case_insensitive=None):
+    debug = True
     if debug:
         import inspect
         frame = inspect.currentframe()
@@ -511,11 +519,12 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
             times_taken.append((datetime.now() - start_time_for_mg).total_seconds())
             print "average_time_taken:", sum(times_taken) / len(times_taken), "seconds"
 
-    if debug: print "[location-extractor] locations before looking in columns:", locations
+    if debug: print "[location-extractor] number of locations before looking in columns:", len(locations)
 
     if max_seconds is None or (datetime.now() - start).total_seconds() < max_seconds:
         if debug: print "[location-extractor] get locations by looking for columns with location keywords in them"
         lists = findall("((?:\n^[^\n]{4,20}$){5,})", text, MULTILINE)
+        if debug: print "lists:", lists
         for text_of_list in lists:
             if max_seconds is None or (datetime.now() - start).total_seconds() < max_seconds:
                 count = 0
@@ -537,10 +546,16 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
     names = [location['name'] for location in locations]
 
 
-    if debug: print "[location-extractor] locations before removing duplicates:", locations
+    if debug: print "[location-extractor] number of locations before removing duplicates:", len(locations)
 
     #see: http://stackoverflow.com/questions/21720199/python-remove-any-element-from-a-list-of-strings-that-is-a-substring-of-anothe
     names_verbose = filter(lambda x: [x for i in names if x in i and x != i] == [], names)
+    if debug: print "[location-extractor] names_verbose:", names_verbose
+
+    # exclude names_verbose that were passed in suggestions, but not found via regex
+    names_verbose = [name for name in names_verbose if (suggestions is None or name not in suggestions) or name in extracted_names]
+    if debug: print "[location-extractor] names_verbose:", names_verbose
+
     for location in locations:
         name = location['name']
         for name_verbose in names_verbose:
@@ -648,6 +663,7 @@ def extract_locations_with_context(inpt, suggestions=None, ignore_these_names=[]
         if inpt.endswith(".pdf") or inpt.startswith("%PDF"):
             return extract_locations_with_context_from_pdf(inpt, debug=debug)
         else:
+            print " [extract_locations_with_context] calling extract_locations_with_context_from_text"
             return extract_locations_with_context_from_text(inpt, suggestions=suggestions, ignore_these_names=ignore_these_names, debug=debug, max_seconds=max_seconds, return_abbreviations=return_abbreviations, case_insensitive=case_insensitive)
     elif "file" in str(type(inpt)).lower():
         print "isinstance file with name", inpt.name
