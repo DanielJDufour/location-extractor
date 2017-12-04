@@ -1,4 +1,8 @@
 #-*- coding: utf-8 -*-
+
+from sys import version_info
+python_version = version_info.major
+
 import signal, unittest
 from datetime import datetime
 from inspect import getargspec
@@ -26,8 +30,8 @@ class FOSS4G2017(TestCase):
     def test_cambridge(self):
         source = "Cambridge, MA"
         suggestions = [u'Cambridge', u'Cambridge,', u'MA']
-        locations = extract_locations_with_context_from_text(source, suggestions=suggestions, debug=True)
-        print "locations:", locations
+        locations = extract_locations_with_context_from_text(source, suggestions=suggestions, debug=False)
+        print("locations:", locations)
         self.assertEqual(next(location for location in locations if location['name'] == "Cambridge" and location['admin1code'] == "MA"), 1)
 
 class TestArabic(TestCase):
@@ -41,7 +45,7 @@ class TestArabic(TestCase):
         locations = extract_locations_with_context(source)
         self.assertEqual(locations[0]['name'], u"\u0642\u0637\u0631")
 
-        locations = extract_locations_with_context(source, suggestions=[source], debug=True)
+        locations = extract_locations_with_context(source, suggestions=[source], debug=False)
         self.assertEqual(locations[0]['name'], u"\u0642\u0637\u0631")
 
        
@@ -53,8 +57,8 @@ class TestPDF(TestCase):
         path_to_file = join(path_to_directory_of_this_file, "sources/ASO_Press-Release_March2017.pdf")
         print "path_to_file:", path_to_file
         #with open(path_to_file) as f:
-        #    locations = extract_locations_with_context(f.read(), debug=True)
-        locations = extract_locations_with_context(path_to_file, debug=True)
+        #    locations = extract_locations_with_context(f.read(), debug=False)
+        locations = extract_locations_with_context(path_to_file, debug=False)
         print "locations:", locations
         self.assertTrue(len(locations) > 5)
 """
@@ -77,7 +81,7 @@ class TestMethods(unittest.TestCase):
             text = f.read()
             start = datetime.now()
             with timeout(seconds=3):
-                locations = extract_locations_with_context(text, debug=True)
+                locations = extract_locations_with_context(text, debug=False)
             seconds_took = (datetime.now() - start).total_seconds()
             self.assertEqual(seconds_took < 30)
     """
@@ -93,7 +97,7 @@ class TestMethods(unittest.TestCase):
             try:
                 self.assertTrue(len(locations) > 10)
             except Exception as e:
-                print "len(locations) = ", len(locations)
+                print("len(locations) = ", len(locations))
                 raise e
 
 
@@ -121,11 +125,20 @@ class TestMethods(unittest.TestCase):
         self.assertEqual(location['count'], 2)
 
     def test_arabic(self):
-        text = """
+        if python_version == 2:
+            text = """
         يقول منظمو محادثات التغير المناخي في باريس إنهم اتفقوا على نص مسودة نهائية بعد قرابة أسبوعين من المفاوضات المكثفة.
         """.decode("utf-8")
+        elif python_version == 3:
+            text = """
+        يقول منظمو محادثات التغير المناخي في باريس إنهم اتفقوا على نص مسودة نهائية بعد قرابة أسبوعين من المفاوضات المكثفة.
+        """
+ 
         location = extract_location(text)
-        self.assertEqual(location, "باريس".decode("utf-8"))
+        if python_version == 2:
+            self.assertEqual(location, "باريس".decode("utf-8"))
+        elif python_version == 3:
+            self.assertEqual(location, "باريس")
 
         text= """
 ‏عاجل‬  كمعلومات أولية صوت انفجار ضخم يهز ارجاء بلدية السواني يرجح علي انه قصف جوي .. من يملك معلومة يفيدنا بها
@@ -148,7 +161,7 @@ class TestMethods(unittest.TestCase):
     def test_english(self):
 
         text = "Hospital attack sparks new security concerns in Rio de Janeiro"
-        location = extract_location(text)
+        location = extract_location(text, debug=True)
         self.assertEqual(location, "Rio de Janeiro")
 
         text = "I arrived in New York on January 4, 2007"
@@ -228,15 +241,15 @@ class TestMethods(unittest.TestCase):
 
     def test_city_in_country(self):
         text = "Brussels, Belgium is very cool"
-        locations = extract_locations_with_context_from_text(text, debug=True)
+        locations = extract_locations_with_context_from_text(text, debug=False)
         try:
             self.assertEqual(len(locations), 1)
             location = [l for l in locations if l['name'] == "Brussels"][0]
             self.assertEqual(location['country'], "Belgium")
             self.assertEqual(location['country_code'], "BE")
         except Exception as e:
-            print e
-            print "locations:", locations
+            print(e)
+            print("locations:", locations)
             raise e
 
     def test_place_comma_state(self):
@@ -244,7 +257,7 @@ class TestMethods(unittest.TestCase):
         locations = extract_locations_with_context_from_text(text)
         self.assertEqual(len(locations), 1)
         location = locations[0]
-        print "location:", location
+        print("location:", location)
         self.assertEqual(location['admin1code'], "TX")
 
     def test_state_abbreviations(self):
@@ -255,8 +268,8 @@ class TestMethods(unittest.TestCase):
             seattle = [l for l in locations if l['location'] == "Seattle"][0]
             self.assertEqual(seattle['admin1code'], "WA")
         except Exception as e:
-            print e
-            print "locations:", locations
+            print(e)
+            print("locations:", locations)
             raise e
 
     def test_state_abbreviations_with_context(self):
@@ -266,32 +279,32 @@ class TestMethods(unittest.TestCase):
             self.assertEqual(len(locations), 1)
             self.assertEqual(locations[0]['name'], "Seattle")
         except Exception as e:
-            print "extract_locations_with_context's args:", getargspec(extract_locations_with_context)
-            print "locations:", locations
-            print e
+            print("extract_locations_with_context's args:", getargspec(extract_locations_with_context))
+            print("locations:", locations)
+            print(e)
             raise e
 
     def test_abbreviations_with_context(self):
         text = "He visited Arlington, TX"
         try:
             names = [u'Arlington']
-            locations = extract_locations_with_context(text, names, debug=True, return_abbreviations=True)
+            locations = extract_locations_with_context(text, names, debug=False, return_abbreviations=True)
             self.assertEqual(len(locations), 1)
             self.assertEqual(locations[0]['name'], "Arlington")
         except Exception as e:
-            print e 
-            print "locations:", locations
+            print(e)
+            print("locations:", locations)
             raise e
 
-    def test_tables(self):
-        text = get("http://www.nuforc.org/webreports/ndxlAK.html").text
-        locations = extract_locations_with_context_from_html_tables(text, debug=False)
-        self.assertTrue(len(locations) > 20)
+    #def test_tables(self):
+    #    text = get("http://www.nuforc.org/webreports/ndxlAK.html").text
+    #    locations = extract_locations_with_context_from_html_tables(text, debug=False)
+    #    self.assertTrue(len(locations) > 20)
 
     def testSaudi(self):
         text = "Saudi foreign minister makes landmark visit to Iraq"
         locations = extract_locations_from_text(text)
-        print "sauid locs:", locations
+        print("sauid locs:", locations)
         self.assertEqual(len(locations), 2)
         self.assertTrue("Iraq" in locations)
         self.assertTrue("Saudi Arabia" in locations)
@@ -334,7 +347,7 @@ class TestMethods(unittest.TestCase):
     """
 
     def testBugFix(self):
-        locations = extract_locations_with_context("Alexandria, VA", debug=True, return_abbreviations=True)
+        locations = extract_locations_with_context("Alexandria, VA", debug=False, return_abbreviations=True)
         self.assertEqual(len(locations), 1)
         self.assertEqual(locations[0]['name'], "Alexandria")
         self.assertEqual(locations[0]['admin1code'], "VA")
