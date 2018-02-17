@@ -38,9 +38,13 @@ dictionary_of_letters = {}
 global nonlocations
 nonlocations = []
 
+open_kwargs = {}
+if python_version == 3:
+    open_kwargs["encoding"] = "utf-8"
+
 def load_non_locations():
     global nonlocations
-    with open(directory_of_this_file + "/nonlocations.txt") as f:
+    with open(directory_of_this_file + "/nonlocations.txt", **open_kwargs) as f:
         for line in f:
             if line and not line.startswith("#"):
                 nonlocations.append(line.strip())
@@ -77,7 +81,7 @@ def load_language_into_dictionary_of_keywords(language):
             #print "filename is", filename
             if filename == "demonyms.txt":
                 dictionary_of_keywords[language]['demonyms'] = {}
-                with open(directory_of_language_files + "/" + filename) as f:
+                with open(directory_of_language_files + "/" + filename, **open_kwargs) as f:
                     for line in read_lines(f):
                         if line:
                             demonym, place = line.split("\t")
@@ -85,20 +89,20 @@ def load_language_into_dictionary_of_keywords(language):
 
             elif filename == "abbreviations.txt":
                 dictionary_of_keywords[language]['abbreviations'] = {}
-                with open(directory_of_language_files + "/" + filename) as f:
+                with open(directory_of_language_files + "/" + filename, **open_kwargs) as f:
                     for line in read_lines(f):
                         if line:
                             abbreviation, place = line.split("\t")
                             dictionary_of_keywords[language]['abbreviations'][abbreviation] = place
             elif filename == "countries.txt":
                 dictionary_of_keywords[language]['countries'] = {}
-                with open(directory_of_language_files + "/" + filename) as f:
+                with open(directory_of_language_files + "/" + filename, **open_kwargs) as f:
                     for line in read_lines(f):
                         if line:
                             country, country_code = line.split("\t")
                             dictionary_of_keywords[language]['countries'][country] = country_code
             else:
-                with open(directory_of_language_files + "/" + filename) as f:
+                with open(directory_of_language_files + "/" + filename, **open_kwargs) as f:
                     keywords = [keyword for keyword in read_lines(f) if keyword]
                     #print "keywords:", keywords
                     keywords += [keyword.title() for keyword in keywords]
@@ -107,7 +111,7 @@ def load_language_into_dictionary_of_keywords(language):
 def load_language_into_dictionary_of_letters(language):
     global dictionary_of_letters
     letters = set()
-    with open(directory_of_letters + "/" + language + ".txt") as f:
+    with open(directory_of_letters + "/" + language + ".txt", **open_kwargs) as f:
         for line in read_lines(f):
             if line:
                 letter = line.strip()
@@ -607,7 +611,7 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
        
 def extract_locations_from_path_to_pdf(path_to_pdf, debug=False):
     if debug: print("starting extract_locations_from_path_to_pdf", path_to_pdf)
-    with open(path_to_pdf) as f:
+    with open(path_to_pdf, **open_kwargs) as f:
         return extract_locations_from_pdf(pdf)
 
 # takes in a pdf file and returns the text
