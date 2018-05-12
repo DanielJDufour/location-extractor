@@ -5,10 +5,10 @@ from broth import Broth
 import csv
 from datetime import datetime
 from docx import Document
+from itertools import chain
 from os.path import dirname, realpath
 from os import listdir
 from re import findall, finditer, IGNORECASE, MULTILINE, search, sub, UNICODE
-import regex
 import signal
 flags = MULTILINE|UNICODE
 
@@ -413,6 +413,11 @@ def extract_locations_with_context_from_html_tables(text, debug=False):
         print("[extract_locations_with_context_from_html_tables]:", e)
         raise e
 
+def findnames(text, names, flags=None, debug=True):
+    print("names:", type(names))
+    result = list(chain.from_iterable([finditer(pattern=name, string=text, flags=flags) for name in names]))
+    if debug: print("result:", result)
+    return result
 
 def extract_locations_with_context_from_text(text, suggestions=None, ignore_these_names=None, debug=False, max_seconds=None, return_abbreviations=False, case_insensitive=None):
     debug = True
@@ -470,8 +475,6 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
 
 
     if debug: print("[location_extractor] finding locations and surrounding information including date and paragraph")
-    pattern = u"(" + u"|".join(names) + u")"
-    if debug: print("pattern:", pattern)
     if debug: counter = -1
     if debug: times_taken = []
     sentences = [{'text': m.group(0), 'start': m.start(), 'end': m.end() } for m in finditer("[^\.\n]+", text)]
@@ -479,7 +482,7 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
     demonym_to_location_keys = list(demonym_to_location.keys())
     if debug: print("[location_extractor] demonym_to_location_keys:", demonym_to_location_keys)
     abbreviation_to_location_keys = list(abbreviation_to_location.keys())
-    for matchgroup in regex.finditer(pattern, text, flags, overlapped=True):
+    for matchgroup in findnames(text, names, flags):
 
         if max_seconds and (datetime.now() - start).total_seconds() > max_seconds:
             break

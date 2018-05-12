@@ -4,5 +4,4 @@ date-extractor
 language-detector
 python-docx
 pytz
-regex
 table-extractor

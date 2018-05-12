@@ -31,10 +31,19 @@ class FOSS4G2018(TestCase):
         source = "I went to Dupont Circle"
         suggestions = ['went to', 'Circle', 'I went', 'Dupont', 'Dupont Circle', 'to Dupont', 'went']
         locations = extract_locations_with_context_from_text(source, suggestions, debug=False)
-        print("locations:", locations)
+        print("test_circle locations:", locations)
         names = [l['name'] for l in locations]
-        print("names:", names)
+        print("test_circle names:", names)
         self.assertTrue("Dupont Circle" in names)
+    def test_circle2(self):
+        source = 'I went to Dupont Circle'
+        suggestions = ['Dupont', 'Dupont Circle', 'I went', 'went', 'went to', 'to Dupont', 'Circle']
+        return_abbreviations = True
+        locations = extract_locations_with_context_from_text(source, suggestions, debug=False, return_abbreviations=return_abbreviations)
+        print("test_circle2 locations:", locations)
+        names = [l['name'] for l in locations]
+        print("test_circle2 names:", names)
+        self.assertTrue("Dupont Circle" in names)        
 
 class FOSS4G2017(TestCase):
     def test_cambridge(self):
