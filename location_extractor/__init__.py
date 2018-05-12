@@ -8,6 +8,7 @@ from docx import Document
 from os.path import dirname, realpath
 from os import listdir
 from re import findall, finditer, IGNORECASE, MULTILINE, search, sub, UNICODE
+import regex
 import signal
 flags = MULTILINE|UNICODE
 
@@ -201,7 +202,7 @@ def extract_locations_from_text(text, debug=False, return_demonyms=False, return
             if debug: print("pattern:", [pattern])
             for m in finditer(pattern, text, MULTILINE):
                 demonym = m.group(0)
-                if debug: print("demonym jyeah:", demonym)
+                if debug: print("demonym:", demonym)
                 if demonym in d['demonyms']:
                     location = d['demonyms'][demonym]
                     demonyms.append({"demonym": demonym, "location": location})
@@ -470,6 +471,7 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
 
     if debug: print("[location_extractor] finding locations and surrounding information including date and paragraph")
     pattern = u"(" + u"|".join(names) + u")"
+    if debug: print("pattern:", pattern)
     if debug: counter = -1
     if debug: times_taken = []
     sentences = [{'text': m.group(0), 'start': m.start(), 'end': m.end() } for m in finditer("[^\.\n]+", text)]
@@ -477,7 +479,7 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
     demonym_to_location_keys = list(demonym_to_location.keys())
     if debug: print("[location_extractor] demonym_to_location_keys:", demonym_to_location_keys)
     abbreviation_to_location_keys = list(abbreviation_to_location.keys())
-    for matchgroup in finditer(pattern, text, flags):
+    for matchgroup in regex.finditer(pattern, text, flags, overlapped=True):
 
         if max_seconds and (datetime.now() - start).total_seconds() > max_seconds:
             break
@@ -534,7 +536,7 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
             times_taken.append((datetime.now() - start_time_for_mg).total_seconds())
             print("average_time_taken:", sum(times_taken) / len(times_taken), "seconds")
 
-    if debug: print("[location-extractor] number of locations before looking in columns:", len(locations))
+    if debug: print("[location-extractor] locs before looking in columns:", [l['name'] for l in locations])
 
     if max_seconds is None or (datetime.now() - start).total_seconds() < max_seconds:
         if debug: print("[location-extractor] get locations by looking for columns with location keywords in them")
@@ -561,10 +563,10 @@ def extract_locations_with_context_from_text(text, suggestions=None, ignore_thes
     names = [location['name'] for location in locations]
 
 
-    if debug: print("[location-extractor] number of locations before removing duplicates:", len(locations))
+    if debug: print("[location-extractor] locations before removing duplicates:", locations if len(locations) < 5 else len(locations))
 
     #see: http://stackoverflow.com/questions/21720199/python-remove-any-element-from-a-list-of-strings-that-is-a-substring-of-anothe
-    names_verbose = filter(lambda x: [x for i in names if x in i and x != i] == [], names)
+    names_verbose = list(filter(lambda x: [x for i in names if x in i and x != i] == [], names))
     if debug: print("[location-extractor] names_verbose:", names_verbose)
 
     # exclude names_verbose that were passed in suggestions, but not found via regex

@@ -26,6 +26,16 @@ class timeout:
         signal.alarm(0)
 
 
+class FOSS4G2018(TestCase):
+    def test_circle(self):
+        source = "I went to Dupont Circle"
+        suggestions = ['went to', 'Circle', 'I went', 'Dupont', 'Dupont Circle', 'to Dupont', 'went']
+        locations = extract_locations_with_context_from_text(source, suggestions, debug=False)
+        print("locations:", locations)
+        names = [l['name'] for l in locations]
+        print("names:", names)
+        self.assertTrue("Dupont Circle" in names)
+
 class FOSS4G2017(TestCase):
     def test_cambridge(self):
         source = "Cambridge, MA"
