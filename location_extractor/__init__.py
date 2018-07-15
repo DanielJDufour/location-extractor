@@ -175,7 +175,7 @@ def extract_locations_from_text(text, debug=False, return_demonyms=False, return
 
             # \u00e3 is the a with the curly on top like in Sao Tome
             # \u00e9 is the e with accent on top
-            location_pattern = br"((?:[A-Z][a-z\u00e3\u00e9]+|[A-Z]|Santo{2,})(?: de)?(?: [A-Z][a-z\u00e3\u00e9]+|[A-Z]{2,})+)".decode('raw_unicode_escape')
+            location_pattern = br"((?:[A-Z][a-z\u00e3\u00e9]+|[A-Z]|Santo{2,})(?: de)?(?: [A-Z][a-z\u00e3\u00e9]+|[A-Z]{2,})?)".decode('raw_unicode_escape')
 
             #keyword comes before location
             locations.update(flatten(findall(br"(?:(?:[^A-Za-z\u00e3\u00e9]|^)(?:".decode('raw_unicode_escape') + "|".join(d['before']) + ") )" + location_pattern, text, flags)))
