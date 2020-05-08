@@ -1,0 +1,26 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+black = "*"
+beautifulsoup4 = "*"
+broth = "*"
+date-extractor = "*"
+language-detector = "*"
+python-docx = "*"
+pytz = "*"
+table-extractor = "*"
+pypdf2 = "*"
+bscrp = "*"
+numpy = "*"
+wake = {editable = true,path = "./../../wake"}
+
+[requires]
+python_version = "3.6"
+
+[pipenv]
+allow_prereleases = true
